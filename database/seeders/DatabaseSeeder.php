@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             CategoryContentSeeder::class,
         ]);
 
-        User::factory()->create([
+        User::factory()->admin()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);

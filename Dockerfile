@@ -2,6 +2,8 @@ FROM composer:2.8 AS vendor
 
 WORKDIR /app
 
+ENV VIEW_COMPILED_PATH=/app/storage/framework/views
+
 COPY . .
 
 RUN mkdir -p bootstrap/cache storage/framework/{cache,sessions,views,testing}
@@ -12,7 +14,8 @@ RUN composer install \
     --no-progress \
     --prefer-dist \
     --optimize-autoloader \
-    --ignore-platform-req=ext-redis
+    --ignore-platform-req=ext-redis \
+    --ignore-platform-req=ext-intl
 
 RUN composer dump-autoload --optimize --no-dev
 RUN VIEW_COMPILED_PATH=/app/storage/framework/views php artisan wayfinder:generate --with-form --no-interaction
@@ -52,6 +55,7 @@ FROM dunglas/frankenphp:1-php8.4-bookworm
 WORKDIR /app
 
 RUN install-php-extensions \
+    intl \
     pcntl \
     pdo_pgsql \
     redis

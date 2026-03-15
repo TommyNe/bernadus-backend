@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN mkdir -p bootstrap/cache storage/framework/{cache,sessions,views,testing}
+
 RUN composer install \
     --no-dev \
     --no-interaction \
@@ -13,6 +15,7 @@ RUN composer install \
     --ignore-platform-req=ext-redis
 
 RUN composer dump-autoload --optimize --no-dev
+RUN VIEW_COMPILED_PATH=/app/storage/framework/views php artisan wayfinder:generate --with-form --no-interaction
 
 
 FROM node:22-bookworm-slim AS frontend
@@ -28,7 +31,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY --from=vendor /app/vendor ./vendor
-COPY resources ./resources
+COPY --from=vendor /app/resources ./resources
 COPY public ./public
 COPY app ./app
 COPY bootstrap ./bootstrap

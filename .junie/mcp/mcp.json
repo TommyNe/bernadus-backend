@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/usr/bin/php",
+            "args": [
+                "/home/thomasn/Developer/bernadus-backend/bernadus-backend/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}

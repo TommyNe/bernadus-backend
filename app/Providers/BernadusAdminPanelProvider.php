@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Filament\Widgets\ContentOverviewWidget;
-use App\Filament\Widgets\RecentUpdatesWidget;
+use App\Filament\Widgets\CurrentBoardWidget;
+use App\Filament\Widgets\DashboardStatsWidget;
+use App\Filament\Widgets\RecentChronicleEntriesWidget;
+use App\Filament\Widgets\UpcomingEventsWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -35,18 +37,22 @@ class BernadusAdminPanelProvider extends PanelProvider
             ])
             ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([
-                NavigationGroup::make('Redaktion')
-                    ->icon('heroicon-o-document-text'),
-                NavigationGroup::make('Struktur')
-                    ->icon('heroicon-o-squares-2x2'),
+                NavigationGroup::make('Inhalte')->icon('heroicon-o-document-text'),
+                NavigationGroup::make('Verein')->icon('heroicon-o-users'),
+                NavigationGroup::make('Veranstaltungen')->icon('heroicon-o-calendar-days'),
+                NavigationGroup::make('Chronik')->icon('heroicon-o-book-open'),
+                NavigationGroup::make('Wettbewerbe')->icon('heroicon-o-trophy'),
+                NavigationGroup::make('Plakettenregeln')->icon('heroicon-o-adjustments-horizontal'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                ContentOverviewWidget::class,
-                RecentUpdatesWidget::class,
+                DashboardStatsWidget::class,
+                CurrentBoardWidget::class,
+                UpcomingEventsWidget::class,
+                RecentChronicleEntriesWidget::class,
                 AccountWidget::class,
             ])
             ->middleware([

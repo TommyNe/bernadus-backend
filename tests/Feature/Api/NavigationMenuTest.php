@@ -12,23 +12,25 @@ it('returns the seeded navigation tree', function () {
 
     $response
         ->assertSuccessful()
-        ->assertJsonCount(7, 'data')
-        ->assertJsonPath('data.0.title', 'Start')
+        ->assertJsonCount(10, 'data')
+        ->assertJsonPath('data.0.title', 'Startseite')
         ->assertJsonPath('data.1.title', 'Über uns')
-        ->assertJsonPath('data.1.children.0.title', 'Verein & Geschichte')
-        ->assertJsonPath('data.1.children.4.slug', 'vereinshymne')
-        ->assertJsonPath('data.6.children.0.path', '/kontakt/kontaktformular-info');
+        ->assertJsonPath('data.1.children.0.title', 'Geschichte')
+        ->assertJsonPath('data.2.title', 'Vorstand & Team')
+        ->assertJsonPath('data.3.children.2.slug', 'plaketten-pokalschiessen')
+        ->assertJsonPath('data.7.children.0.path', '/newsletter/whatsapp-newsletter')
+        ->assertJsonPath('data.9.path', '/datenschutz');
 });
 
 it('returns a single navigation item by slug', function () {
     app(NavigationItemSeeder::class)->run();
 
-    $response = $this->getJson('/api/navigation/mitmachen');
+    $response = $this->getJson('/api/navigation/mitglied-werden');
 
     $response
         ->assertSuccessful()
-        ->assertJsonPath('data.title', 'Mitmachen')
-        ->assertJsonPath('data.slug', 'mitmachen')
-        ->assertJsonCount(3, 'data.children')
-        ->assertJsonPath('data.children.2.slug', 'whatsapp-newsletter');
+        ->assertJsonPath('data.title', 'Mitglied werden')
+        ->assertJsonPath('data.slug', 'mitglied-werden')
+        ->assertJsonCount(4, 'data.children')
+        ->assertJsonPath('data.children.2.slug', 'antrag');
 });

@@ -1,0 +1,124 @@
+<?php
+
+namespace App\Filament\Resources\Competitions;
+
+use App\Filament\Resources\Competitions\Pages\CreateCompetition;
+use App\Filament\Resources\Competitions\Pages\EditCompetition;
+use App\Filament\Resources\Competitions\Pages\ListCompetitions;
+use App\Filament\Resources\Competitions\RelationManagers\PlaqueAwardRulesRelationManager;
+use App\Filament\Resources\Competitions\RelationManagers\ResultCategoriesRelationManager;
+use App\Models\Competition;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class CompetitionResource extends Resource
+{
+    protected static ?string $model = Competition::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
+
+    protected static ?string $modelLabel = 'Wettbewerb';
+
+    protected static ?string $pluralModelLabel = 'Wettbewerbe';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Wettbewerbe';
+
+    protected static ?int $navigationSort = 20;
+
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Select::make('competition_type_id')
+                    ->relationship('type', 'name')
+                    ->label('Wettbewerbstyp')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                Select::make('event_id')
+                    ->relationship('event', 'title')
+                    ->label('Termin')
+                    ->searchable()
+                    ->preload(),
+                TextInput::make('year')
+                    ->label('Jahr')
+                    ->numeric(),
+                TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+                Textarea::make('description')
+                    ->rows(5)
+                    ->columnSpanFull(),
+                TextInput::make('source_url')
+                    ->label('Quell-URL')
+                    ->url()
+                    ->maxLength(255),
+                TextInput::make('sort_order')
+                    ->label('Sortierung')
+                    ->numeric()
+                    ->default(0)
+                    ->required(),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->recordTitleAttribute('title')
+            ->columns([
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('type.name')
+                    ->label('Typ')
+                    ->searchable(),
+                TextColumn::make('year')
+                    ->label('Jahr')
+                    ->sortable(),
+                TextColumn::make('event.title')
+                    ->label('Termin')
+                    ->placeholder('-'),
+                TextColumn::make('sort_order')
+                    ->label('Sortierung')
+                    ->sortable(),
+            ])
+            ->defaultSort('year', 'desc')
+            ->recordActions([
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            ResultCategoriesRelationManager::class,
+            PlaqueAwardRulesRelationManager::class,
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListCompetitions::route('/'),
+            'create' => CreateCompetition::route('/create'),
+            'edit' => EditCompetition::route('/{record}/edit'),
+        ];
+    }
+}

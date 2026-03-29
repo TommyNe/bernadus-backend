@@ -1,0 +1,1474 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bernadus Backend API",
+    "version": "1.0.0",
+    "description": "OpenAPI-Dokumentation fuer die JSON-API des Bernadus-Backends."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Aktuelle Anwendung"
+    }
+  ],
+  "tags": [
+    { "name": "Pages" },
+    { "name": "Page Sections" },
+    { "name": "External Links" },
+    { "name": "Venues" },
+    { "name": "Events" },
+    { "name": "Competition Types" },
+    { "name": "Competitions" },
+    { "name": "Competition Result Categories" },
+    { "name": "Competition Results" },
+    { "name": "Plaque Award Rules" },
+    { "name": "Chronicles" },
+    { "name": "Chronicle Entries" },
+    { "name": "Media" },
+    { "name": "People" },
+    { "name": "Roles" },
+    { "name": "Role Assignments" },
+    { "name": "Users" }
+  ],
+  "paths": {
+    "/api/pages": {
+      "get": {
+        "tags": ["Pages"],
+        "summary": "Listet Seiten",
+        "operationId": "listPages",
+        "responses": {
+          "200": {
+            "description": "Seiten erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PageCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pages/{value}": {
+      "get": {
+        "tags": ["Pages"],
+        "summary": "Liefert eine Seite per Slug",
+        "operationId": "showPage",
+        "parameters": [{ "$ref": "#/components/parameters/PageSlug" }],
+        "responses": {
+          "200": {
+            "description": "Seite gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PageResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/page-sections": {
+      "get": {
+        "tags": ["Page Sections"],
+        "summary": "Listet Seitensektionen",
+        "operationId": "listPageSections",
+        "responses": {
+          "200": {
+            "description": "Seitensektionen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PageSectionCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/page-sections/{value}": {
+      "get": {
+        "tags": ["Page Sections"],
+        "summary": "Liefert eine Seitensektion per ID",
+        "operationId": "showPageSection",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Seitensektion gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PageSection" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/external-links": {
+      "get": {
+        "tags": ["External Links"],
+        "summary": "Listet externe Links",
+        "operationId": "listExternalLinks",
+        "responses": {
+          "200": {
+            "description": "Links erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExternalLinkCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/external-links/{value}": {
+      "get": {
+        "tags": ["External Links"],
+        "summary": "Liefert einen externen Link per link_key",
+        "operationId": "showExternalLink",
+        "parameters": [{ "$ref": "#/components/parameters/ExternalLinkKey" }],
+        "responses": {
+          "200": {
+            "description": "Link gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExternalLinkResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/venues": {
+      "get": {
+        "tags": ["Venues"],
+        "summary": "Listet Veranstaltungsorte",
+        "operationId": "listVenues",
+        "responses": {
+          "200": {
+            "description": "Orte erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VenueCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/venues/{value}": {
+      "get": {
+        "tags": ["Venues"],
+        "summary": "Liefert einen Veranstaltungsort per ID",
+        "operationId": "showVenue",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Ort gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VenueResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/events": {
+      "get": {
+        "tags": ["Events"],
+        "summary": "Listet Veranstaltungen",
+        "operationId": "listEvents",
+        "responses": {
+          "200": {
+            "description": "Veranstaltungen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EventCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/{value}": {
+      "get": {
+        "tags": ["Events"],
+        "summary": "Liefert eine Veranstaltung per Slug",
+        "operationId": "showEvent",
+        "parameters": [{ "$ref": "#/components/parameters/EventSlug" }],
+        "responses": {
+          "200": {
+            "description": "Veranstaltung gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EventResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/competition-types": {
+      "get": {
+        "tags": ["Competition Types"],
+        "summary": "Listet Wettbewerbskategorien",
+        "operationId": "listCompetitionTypes",
+        "responses": {
+          "200": {
+            "description": "Wettbewerbstypen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionTypeCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competition-types/{value}": {
+      "get": {
+        "tags": ["Competition Types"],
+        "summary": "Liefert einen Wettbewerbstyp per type_key",
+        "operationId": "showCompetitionType",
+        "parameters": [{ "$ref": "#/components/parameters/CompetitionTypeKey" }],
+        "responses": {
+          "200": {
+            "description": "Wettbewerbstyp gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionTypeResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/competitions": {
+      "get": {
+        "tags": ["Competitions"],
+        "summary": "Listet Wettbewerbe",
+        "operationId": "listCompetitions",
+        "responses": {
+          "200": {
+            "description": "Wettbewerbe erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competitions/{value}": {
+      "get": {
+        "tags": ["Competitions"],
+        "summary": "Liefert einen Wettbewerb per ID",
+        "operationId": "showCompetition",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Wettbewerb gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/competition-result-categories": {
+      "get": {
+        "tags": ["Competition Result Categories"],
+        "summary": "Listet Ergebniskategorien",
+        "operationId": "listCompetitionResultCategories",
+        "responses": {
+          "200": {
+            "description": "Ergebniskategorien erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionResultCategoryCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competition-result-categories/{value}": {
+      "get": {
+        "tags": ["Competition Result Categories"],
+        "summary": "Liefert eine Ergebniskategorie per ID",
+        "operationId": "showCompetitionResultCategory",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Ergebniskategorie gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionResultCategoryResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/competition-results": {
+      "get": {
+        "tags": ["Competition Results"],
+        "summary": "Listet Wettbewerbsergebnisse",
+        "operationId": "listCompetitionResults",
+        "responses": {
+          "200": {
+            "description": "Ergebnisse erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionResultCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competition-results/{value}": {
+      "get": {
+        "tags": ["Competition Results"],
+        "summary": "Liefert ein Wettbewerbsergebnis per ID",
+        "operationId": "showCompetitionResult",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Ergebnis gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompetitionResultResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/plaque-award-rules": {
+      "get": {
+        "tags": ["Plaque Award Rules"],
+        "summary": "Listet Plakettenregeln",
+        "operationId": "listPlaqueAwardRules",
+        "responses": {
+          "200": {
+            "description": "Plakettenregeln erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PlaqueAwardRuleCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/plaque-award-rules/{value}": {
+      "get": {
+        "tags": ["Plaque Award Rules"],
+        "summary": "Liefert eine Plakettenregel per ID",
+        "operationId": "showPlaqueAwardRule",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Plakettenregel gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PlaqueAwardRuleResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/chronicles": {
+      "get": {
+        "tags": ["Chronicles"],
+        "summary": "Listet Chroniken",
+        "operationId": "listChronicles",
+        "responses": {
+          "200": {
+            "description": "Chroniken erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChronicleCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chronicles/{value}": {
+      "get": {
+        "tags": ["Chronicles"],
+        "summary": "Liefert eine Chronik per chronicle_key",
+        "operationId": "showChronicle",
+        "parameters": [{ "$ref": "#/components/parameters/ChronicleKey" }],
+        "responses": {
+          "200": {
+            "description": "Chronik gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChronicleResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/chronicle-entries": {
+      "get": {
+        "tags": ["Chronicle Entries"],
+        "summary": "Listet Chronikeintraege",
+        "operationId": "listChronicleEntries",
+        "responses": {
+          "200": {
+            "description": "Chronikeintraege erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChronicleEntryCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chronicle-entries/{value}": {
+      "get": {
+        "tags": ["Chronicle Entries"],
+        "summary": "Liefert einen Chronikeintrag per ID",
+        "operationId": "showChronicleEntry",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Chronikeintrag gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChronicleEntryResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/media": {
+      "get": {
+        "tags": ["Media"],
+        "summary": "Listet Medien",
+        "operationId": "listMedia",
+        "responses": {
+          "200": {
+            "description": "Medien erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MediumCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/media/{value}": {
+      "get": {
+        "tags": ["Media"],
+        "summary": "Liefert ein Medium per ID",
+        "operationId": "showMedium",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Medium gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MediumResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/people": {
+      "get": {
+        "tags": ["People"],
+        "summary": "Listet Personen",
+        "operationId": "listPeople",
+        "responses": {
+          "200": {
+            "description": "Personen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PersonCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/people/{value}": {
+      "get": {
+        "tags": ["People"],
+        "summary": "Liefert eine Person per ID",
+        "operationId": "showPerson",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Person gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PersonResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/roles": {
+      "get": {
+        "tags": ["Roles"],
+        "summary": "Listet Rollen",
+        "operationId": "listRoles",
+        "responses": {
+          "200": {
+            "description": "Rollen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/roles/{value}": {
+      "get": {
+        "tags": ["Roles"],
+        "summary": "Liefert eine Rolle per role_key",
+        "operationId": "showRole",
+        "parameters": [{ "$ref": "#/components/parameters/RoleKey" }],
+        "responses": {
+          "200": {
+            "description": "Rolle gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/role-assignments": {
+      "get": {
+        "tags": ["Role Assignments"],
+        "summary": "Listet Rollenbesetzungen",
+        "operationId": "listRoleAssignments",
+        "responses": {
+          "200": {
+            "description": "Rollenbesetzungen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleAssignmentCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/role-assignments/{value}": {
+      "get": {
+        "tags": ["Role Assignments"],
+        "summary": "Liefert eine Rollenbesetzung per ID",
+        "operationId": "showRoleAssignment",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Rollenbesetzung gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleAssignmentResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Listet Benutzer",
+        "operationId": "listUsers",
+        "responses": {
+          "200": {
+            "description": "Benutzer erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{value}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Liefert einen Benutzer per ID",
+        "operationId": "showUser",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Benutzer gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "NumericId": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "description": "Numerische ID des Datensatzes"
+      },
+      "PageSlug": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Slug einer Seite"
+      },
+      "EventSlug": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Slug einer Veranstaltung"
+      },
+      "ExternalLinkKey": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Schluessel eines externen Links"
+      },
+      "CompetitionTypeKey": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Schluessel eines Wettbewerbstyps"
+      },
+      "ChronicleKey": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Schluessel einer Chronik"
+      },
+      "RoleKey": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Schluessel einer Rolle"
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "Datensatz nicht gefunden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "TimestampFields": {
+        "type": "object",
+        "properties": {
+          "created_at": { "type": ["string", "null"], "format": "date-time" },
+          "updated_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "example": "Not Found" }
+        },
+        "required": ["message"]
+      },
+      "PageSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "slug": { "type": "string" },
+              "title": { "type": "string" },
+              "nav_label": { "type": ["string", "null"] },
+              "meta_title": { "type": ["string", "null"] },
+              "meta_description": { "type": ["string", "null"] },
+              "status": { "type": "string", "enum": ["draft", "published"] },
+              "published_at": { "type": ["string", "null"], "format": "date-time" },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "PageSectionSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "page_id": { "type": "integer" },
+              "section_key": { "type": ["string", "null"] },
+              "section_type": { "type": "string" },
+              "title": { "type": ["string", "null"] },
+              "subtitle": { "type": ["string", "null"] },
+              "content": { "type": ["string", "null"] },
+              "data": { "type": ["object", "array", "null"] },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "Page": {
+        "allOf": [
+          { "$ref": "#/components/schemas/PageSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "sections": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/PageSectionSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "PageSection": {
+        "allOf": [
+          { "$ref": "#/components/schemas/PageSectionSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "page": { "$ref": "#/components/schemas/PageSummary" }
+            }
+          }
+        ]
+      },
+      "ExternalLink": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "link_key": { "type": "string" },
+              "label": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "description": { "type": ["string", "null"] }
+            }
+          }
+        ]
+      },
+      "VenueSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "name": { "type": "string" },
+              "street": { "type": ["string", "null"] },
+              "postal_code": { "type": ["string", "null"] },
+              "city": { "type": ["string", "null"] },
+              "notes": { "type": ["string", "null"] }
+            }
+          }
+        ]
+      },
+      "CompetitionTypeSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "type_key": { "type": "string" },
+              "name": { "type": "string" }
+            }
+          }
+        ]
+      },
+      "CompetitionSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "competition_type_id": { "type": "integer" },
+              "event_id": { "type": ["integer", "null"] },
+              "year": { "type": ["integer", "null"] },
+              "title": { "type": "string" },
+              "description": { "type": ["string", "null"] },
+              "source_url": { "type": ["string", "null"], "format": "uri" },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "CompetitionResultCategorySummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "competition_id": { "type": "integer" },
+              "name": { "type": "string" },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "CompetitionResultSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "competition_result_category_id": { "type": "integer" },
+              "person_id": { "type": ["integer", "null"] },
+              "winner_name": { "type": "string" },
+              "rank": { "type": "integer" },
+              "score": { "type": ["string", "number", "null"] },
+              "score_text": { "type": ["string", "null"] }
+            }
+          }
+        ]
+      },
+      "PlaqueAwardRuleSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "competition_id": { "type": "integer" },
+              "rule_type": { "type": "string", "enum": ["ring_threshold", "gold_milestone"] },
+              "age_from": { "type": ["integer", "null"] },
+              "age_to": { "type": ["integer", "null"] },
+              "required_score": { "type": ["integer", "null"] },
+              "required_gold_count": { "type": ["integer", "null"] },
+              "award_name": { "type": "string" },
+              "award_level": { "type": ["string", "null"] },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "EventSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "venue_id": { "type": ["integer", "null"] },
+              "slug": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": ["string", "null"] },
+              "starts_at": { "type": ["string", "null"], "format": "date-time" },
+              "ends_at": { "type": ["string", "null"], "format": "date-time" },
+              "all_day": { "type": "boolean" },
+              "display_date_text": { "type": ["string", "null"] },
+              "month_label": { "type": ["string", "null"] },
+              "audience_text": { "type": ["string", "null"] },
+              "source_url": { "type": ["string", "null"], "format": "uri" },
+              "external_ics_url": { "type": ["string", "null"], "format": "uri" },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "Venue": {
+        "allOf": [
+          { "$ref": "#/components/schemas/VenueSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "events": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/EventSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "Event": {
+        "allOf": [
+          { "$ref": "#/components/schemas/EventSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "venue": { "$ref": "#/components/schemas/VenueSummary" },
+              "competitions": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/CompetitionSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "CompetitionType": {
+        "allOf": [
+          { "$ref": "#/components/schemas/CompetitionTypeSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "competitions": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/CompetitionSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "Competition": {
+        "allOf": [
+          { "$ref": "#/components/schemas/CompetitionSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "type": { "$ref": "#/components/schemas/CompetitionTypeSummary" },
+              "event": { "$ref": "#/components/schemas/EventSummary" },
+              "result_categories": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/CompetitionResultCategorySummary" }
+              },
+              "plaque_award_rules": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/PlaqueAwardRuleSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "PersonSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "display_name": { "type": "string" },
+              "first_name": { "type": ["string", "null"] },
+              "last_name": { "type": ["string", "null"] },
+              "portrait_media_id": { "type": ["integer", "null"] },
+              "notes": { "type": ["string", "null"] }
+            }
+          }
+        ]
+      },
+      "CompetitionResultCategory": {
+        "allOf": [
+          { "$ref": "#/components/schemas/CompetitionResultCategorySummary" },
+          {
+            "type": "object",
+            "properties": {
+              "competition": { "$ref": "#/components/schemas/CompetitionSummary" },
+              "results": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/CompetitionResultSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "CompetitionResult": {
+        "allOf": [
+          { "$ref": "#/components/schemas/CompetitionResultSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "category": { "$ref": "#/components/schemas/CompetitionResultCategorySummary" },
+              "person": { "$ref": "#/components/schemas/PersonSummary" }
+            }
+          }
+        ]
+      },
+      "PlaqueAwardRule": {
+        "allOf": [
+          { "$ref": "#/components/schemas/PlaqueAwardRuleSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "competition": { "$ref": "#/components/schemas/CompetitionSummary" }
+            }
+          }
+        ]
+      },
+      "ChronicleSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "chronicle_key": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": ["string", "null"] },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "MediumSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "disk": { "type": "string" },
+              "path": { "type": "string" },
+              "url": { "type": ["string", "null"], "format": "uri" },
+              "filename": { "type": "string" },
+              "mime_type": { "type": "string" },
+              "extension": { "type": ["string", "null"] },
+              "size": { "type": ["integer", "null"] },
+              "width": { "type": ["integer", "null"] },
+              "height": { "type": ["integer", "null"] },
+              "title": { "type": ["string", "null"] },
+              "alt_text": { "type": ["string", "null"] }
+            }
+          }
+        ]
+      },
+      "ChronicleEntrySummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "chronicle_id": { "type": "integer" },
+              "year": { "type": "integer" },
+              "title": { "type": ["string", "null"] },
+              "headline": { "type": ["string", "null"] },
+              "pair_text": { "type": "string" },
+              "secondary_text": { "type": ["string", "null"] },
+              "image_media_id": { "type": ["integer", "null"] },
+              "external_image_url": { "type": ["string", "null"], "format": "uri" },
+              "source_url": { "type": ["string", "null"], "format": "uri" },
+              "is_highlighted": { "type": "boolean" },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "Chronicle": {
+        "allOf": [
+          { "$ref": "#/components/schemas/ChronicleSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/ChronicleEntrySummary" }
+              }
+            }
+          }
+        ]
+      },
+      "ChronicleEntry": {
+        "allOf": [
+          { "$ref": "#/components/schemas/ChronicleEntrySummary" },
+          {
+            "type": "object",
+            "properties": {
+              "chronicle": { "$ref": "#/components/schemas/ChronicleSummary" },
+              "image": { "$ref": "#/components/schemas/MediumSummary" }
+            }
+          }
+        ]
+      },
+      "Medium": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MediumSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "portraits": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/PersonSummary" }
+              },
+              "chronicle_images": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/ChronicleEntrySummary" }
+              }
+            }
+          }
+        ]
+      },
+      "RoleSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "role_key": { "type": "string" },
+              "name": { "type": "string" },
+              "description": { "type": ["string", "null"] },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "RoleAssignmentSummary": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "person_id": { "type": "integer" },
+              "role_id": { "type": "integer" },
+              "label_override": { "type": ["string", "null"] },
+              "started_on": { "type": ["string", "null"], "format": "date-time" },
+              "ended_on": { "type": ["string", "null"], "format": "date-time" },
+              "is_current": { "type": "boolean" },
+              "sort_order": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "Person": {
+        "allOf": [
+          { "$ref": "#/components/schemas/PersonSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "portrait": { "$ref": "#/components/schemas/MediumSummary" },
+              "role_assignments": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/RoleAssignmentSummary" }
+              },
+              "competition_results": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/CompetitionResultSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "Role": {
+        "allOf": [
+          { "$ref": "#/components/schemas/RoleSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "assignments": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/RoleAssignmentSummary" }
+              }
+            }
+          }
+        ]
+      },
+      "RoleAssignment": {
+        "allOf": [
+          { "$ref": "#/components/schemas/RoleAssignmentSummary" },
+          {
+            "type": "object",
+            "properties": {
+              "person": { "$ref": "#/components/schemas/PersonSummary" },
+              "role": { "$ref": "#/components/schemas/RoleSummary" }
+            }
+          }
+        ]
+      },
+      "User": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TimestampFields" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" },
+              "is_admin": { "type": "boolean" },
+              "email_verified_at": { "type": ["string", "null"], "format": "date-time" },
+              "two_factor_confirmed_at": { "type": ["string", "null"], "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "PageCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Page" } }
+        },
+        "required": ["data"]
+      },
+      "PageResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Page" }
+        },
+        "required": ["data"]
+      },
+      "PageSectionCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/PageSection" } }
+        },
+        "required": ["data"]
+      },
+      "ExternalLinkCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/ExternalLink" } }
+        },
+        "required": ["data"]
+      },
+      "ExternalLinkResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ExternalLink" }
+        },
+        "required": ["data"]
+      },
+      "VenueCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Venue" } }
+        },
+        "required": ["data"]
+      },
+      "VenueResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Venue" }
+        },
+        "required": ["data"]
+      },
+      "EventCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Event" } }
+        },
+        "required": ["data"]
+      },
+      "EventResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Event" }
+        },
+        "required": ["data"]
+      },
+      "CompetitionTypeCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/CompetitionType" } }
+        },
+        "required": ["data"]
+      },
+      "CompetitionTypeResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/CompetitionType" }
+        },
+        "required": ["data"]
+      },
+      "CompetitionCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Competition" } }
+        },
+        "required": ["data"]
+      },
+      "CompetitionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Competition" }
+        },
+        "required": ["data"]
+      },
+      "CompetitionResultCategoryCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/CompetitionResultCategory" } }
+        },
+        "required": ["data"]
+      },
+      "CompetitionResultCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/CompetitionResultCategory" }
+        },
+        "required": ["data"]
+      },
+      "CompetitionResultCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/CompetitionResult" } }
+        },
+        "required": ["data"]
+      },
+      "CompetitionResultResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/CompetitionResult" }
+        },
+        "required": ["data"]
+      },
+      "PlaqueAwardRuleCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/PlaqueAwardRule" } }
+        },
+        "required": ["data"]
+      },
+      "PlaqueAwardRuleResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/PlaqueAwardRule" }
+        },
+        "required": ["data"]
+      },
+      "ChronicleCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Chronicle" } }
+        },
+        "required": ["data"]
+      },
+      "ChronicleResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Chronicle" }
+        },
+        "required": ["data"]
+      },
+      "ChronicleEntryCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/ChronicleEntry" } }
+        },
+        "required": ["data"]
+      },
+      "ChronicleEntryResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ChronicleEntry" }
+        },
+        "required": ["data"]
+      },
+      "MediumCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Medium" } }
+        },
+        "required": ["data"]
+      },
+      "MediumResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Medium" }
+        },
+        "required": ["data"]
+      },
+      "PersonCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Person" } }
+        },
+        "required": ["data"]
+      },
+      "PersonResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Person" }
+        },
+        "required": ["data"]
+      },
+      "RoleCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Role" } }
+        },
+        "required": ["data"]
+      },
+      "RoleResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Role" }
+        },
+        "required": ["data"]
+      },
+      "RoleAssignmentCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/RoleAssignment" } }
+        },
+        "required": ["data"]
+      },
+      "RoleAssignmentResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/RoleAssignment" }
+        },
+        "required": ["data"]
+      },
+      "UserCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/User" } }
+        },
+        "required": ["data"]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/User" }
+        },
+        "required": ["data"]
+      }
+    }
+  }
+}

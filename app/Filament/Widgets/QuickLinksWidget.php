@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\ExternalLink;
+use App\Models\Page;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -23,7 +24,14 @@ class QuickLinksWidget extends StatsOverviewWidget
             ->get()
             ->keyBy('link_key');
 
+        $aboutPage = Page::query()->where('slug', 'ueber-uns')->first();
+
         return [
+            Stat::make('Über uns', $aboutPage?->title ?? 'Nicht angelegt')
+                ->description($aboutPage !== null ? 'Seite direkt bearbeiten' : 'Seite fehlt noch')
+                ->color('primary')
+                ->icon('heroicon-o-document-text')
+                ->url($aboutPage !== null ? route('filament.admin.resources.pages.edit', ['record' => $aboutPage]) : route('filament.admin.resources.pages.index')),
             Stat::make('Flyer', 'Direkt öffnen')
                 ->description($links->get('official_flyer')?->label ?? 'Nicht hinterlegt')
                 ->color('warning')

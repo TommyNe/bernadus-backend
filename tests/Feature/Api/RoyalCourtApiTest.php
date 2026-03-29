@@ -1,69 +1,51 @@
 <?php
 
-use App\Models\RoyalCourt;
+use App\Models\Chronicle;
+use App\Models\ChronicleEntry;
+use App\Models\Medium;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
-it('groups kings into recent, archive and child kings', function () {
-    Storage::fake('public');
-
-    RoyalCourt::factory()->create([
-        'slug' => 'koenig-2024',
-        'court_type' => 'king',
-        'reign_year' => 2024,
-        'ruler_name' => 'Koenig 2024',
-        'image_path' => 'royal-courts/koenig-2024.jpg',
+it('returns chronicles and chronicle entries with related media', function () {
+    $chronicle = Chronicle::factory()->create([
+        'chronicle_key' => 'shooting_kings',
+        'title' => 'Chronik der Schuetzenkoenige',
     ]);
 
-    RoyalCourt::factory()->create([
-        'slug' => 'koenig-1960',
-        'court_type' => 'king',
-        'reign_year' => 1960,
-        'ruler_name' => 'Koenig 1960',
+    $medium = Medium::factory()->create([
+        'path' => 'chronicles/1980.jpg',
     ]);
 
-    RoyalCourt::factory()->create([
-        'slug' => 'kinderkoenig-2010',
-        'court_type' => 'child_king',
-        'reign_year' => 2010,
-        'ruler_name' => 'Kinderkoenig 2010',
+    ChronicleEntry::factory()->for($chronicle)->for($medium, 'image')->create([
+        'year' => 1980,
+        'headline' => 'Jubilaeum',
     ]);
 
-    $this->getJson('/api/royal-courts')
+    $this->getJson('/api/chronicles')
         ->assertSuccessful()
-        ->assertJsonPath('data.archive_cutoff_year', RoyalCourt::archiveCutoffYear())
-        ->assertJsonCount(1, 'data.recent_kings')
-        ->assertJsonCount(1, 'data.archived_kings')
-        ->assertJsonCount(1, 'data.child_kings')
-        ->assertJsonPath('data.counts.recent_kings', 1)
-        ->assertJsonPath('data.counts.archived_kings', 1)
-        ->assertJsonPath('data.counts.child_kings', 1)
-        ->assertJsonPath('data.recent_kings.0.slug', 'koenig-2024')
-        ->assertJsonPath('data.recent_kings.0.image_path', 'royal-courts/koenig-2024.jpg')
-        ->assertJsonPath('data.recent_kings.0.image_url', Storage::disk('public')->url('royal-courts/koenig-2024.jpg'))
-        ->assertJsonPath('data.archived_kings.0.slug', 'koenig-1960')
-        ->assertJsonPath('data.child_kings.0.slug', 'kinderkoenig-2010');
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.chronicle_key', 'shooting_kings')
+        ->assertJsonPath('data.0.entries.0.year', 1980)
+        ->assertJsonPath('data.0.entries.0.image.path', 'chronicles/1980.jpg');
 });
 
-it('returns a single royal court entry by slug', function () {
-    Storage::fake('public');
-
-    $entry = RoyalCourt::factory()->create([
-        'slug' => 'koenig-2025',
-        'court_type' => 'king',
-        'reign_year' => 2025,
-        'ruler_name' => 'Koenig 2025',
-        'court_name' => 'Koenigin 2025',
-        'image_path' => 'royal-courts/koenig-2025.jpg',
+it('returns chronicle and entry details by key and id', function () {
+    $chronicle = Chronicle::factory()->create([
+        'chronicle_key' => 'child_kings',
     ]);
 
-    $this->getJson('/api/royal-courts/'.$entry->slug)
+    $entry = ChronicleEntry::factory()->for($chronicle)->create([
+        'year' => 2012,
+        'headline' => 'Kinderthron',
+    ]);
+
+    $this->getJson('/api/chronicles/child_kings')
         ->assertSuccessful()
-        ->assertJsonPath('data.ruler_name', 'Koenig 2025')
-        ->assertJsonPath('data.court_name', 'Koenigin 2025')
-        ->assertJsonPath('data.image_path', 'royal-courts/koenig-2025.jpg')
-        ->assertJsonPath('data.image_url', Storage::disk('public')->url('royal-courts/koenig-2025.jpg'))
-        ->assertJsonPath('data.is_archived', false);
+        ->assertJsonPath('data.chronicle_key', 'child_kings');
+
+    $this->getJson('/api/chronicle-entries/'.$entry->id)
+        ->assertSuccessful()
+        ->assertJsonPath('data.year', 2012)
+        ->assertJsonPath('data.chronicle.chronicle_key', 'child_kings');
 });

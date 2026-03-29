@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PageSections;
 
+use App\Filament\PageSections\PageSectionForm;
 use App\Filament\Resources\PageSections\Pages\CreatePageSection;
 use App\Filament\Resources\PageSections\Pages\EditPageSection;
 use App\Filament\Resources\PageSections\Pages\ListPageSections;
@@ -10,10 +11,6 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\KeyValue;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -39,44 +36,7 @@ class PageSectionResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->components([
-                Select::make('page_id')
-                    ->relationship('page', 'title')
-                    ->label('Seite')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                TextInput::make('section_key')
-                    ->label('Section-Key')
-                    ->maxLength(255),
-                Select::make('section_type')
-                    ->label('Abschnittstyp')
-                    ->options([
-                        'hero' => 'Hero',
-                        'rich_text' => 'Rich Text',
-                        'notice' => 'Hinweis',
-                        'faq' => 'FAQ',
-                        'cards' => 'Karten',
-                        'cta' => 'Call to Action',
-                    ])
-                    ->native(false)
-                    ->required(),
-                TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('subtitle')
-                    ->maxLength(255),
-                Textarea::make('content')
-                    ->rows(6)
-                    ->columnSpanFull(),
-                KeyValue::make('data')
-                    ->columnSpanFull(),
-                TextInput::make('sort_order')
-                    ->label('Sortierung')
-                    ->numeric()
-                    ->default(0)
-                    ->required(),
-            ]);
+            ->components(PageSectionForm::components(withPageSelect: true));
     }
 
     public static function table(Table $table): Table

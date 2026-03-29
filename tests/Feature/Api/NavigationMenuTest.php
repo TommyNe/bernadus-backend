@@ -1,36 +1,35 @@
 <?php
 
-use Database\Seeders\NavigationItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('returns the seeded navigation tree', function () {
-    app(NavigationItemSeeder::class)->run();
+it('registers the project api routes', function () {
+    $routes = collect(app('router')->getRoutes()->getRoutesByName())->keys();
 
-    $response = $this->getJson('/api/navigation');
-
-    $response
-        ->assertSuccessful()
-        ->assertJsonCount(10, 'data')
-        ->assertJsonPath('data.0.title', 'Startseite')
-        ->assertJsonPath('data.1.title', 'Über uns')
-        ->assertJsonPath('data.1.children.0.title', 'Geschichte')
-        ->assertJsonPath('data.2.title', 'Vorstand & Team')
-        ->assertJsonPath('data.3.children.2.slug', 'plaketten-pokalschiessen')
-        ->assertJsonPath('data.7.children.0.path', '/newsletter/whatsapp-newsletter')
-        ->assertJsonPath('data.9.path', '/datenschutz');
+    expect($routes)->toContain(
+        'api.pages.index',
+        'api.page-sections.show',
+        'api.external-links.show',
+        'api.venues.index',
+        'api.events.show',
+        'api.competition-types.show',
+        'api.competitions.index',
+        'api.competition-result-categories.show',
+        'api.competition-results.index',
+        'api.plaque-award-rules.show',
+        'api.chronicles.index',
+        'api.chronicle-entries.show',
+        'api.media.index',
+        'api.people.show',
+        'api.roles.index',
+        'api.role-assignments.show',
+        'api.users.index',
+    );
 });
 
-it('returns a single navigation item by slug', function () {
-    app(NavigationItemSeeder::class)->run();
-
-    $response = $this->getJson('/api/navigation/mitglied-werden');
-
-    $response
-        ->assertSuccessful()
-        ->assertJsonPath('data.title', 'Mitglied werden')
-        ->assertJsonPath('data.slug', 'mitglied-werden')
-        ->assertJsonCount(4, 'data.children')
-        ->assertJsonPath('data.children.2.slug', 'antrag');
+it('returns not found for missing records', function () {
+    $this->getJson('/api/pages/unbekannt')->assertNotFound();
+    $this->getJson('/api/external-links/unbekannt')->assertNotFound();
+    $this->getJson('/api/events/unbekannt')->assertNotFound();
 });

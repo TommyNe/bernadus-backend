@@ -1,68 +1,72 @@
 <?php
 
-use App\Models\SubpageItem;
+use App\Models\Medium;
+use App\Models\Person;
+use App\Models\Role;
+use App\Models\RoleAssignment;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('returns active structured subpage items', function () {
-    SubpageItem::factory()->create([
-        'title' => 'Chronik 1905',
-        'slug' => 'chronik-1905',
-        'category' => 'history',
-        'sort_order' => 2,
+it('returns people, roles and assignments with linked records', function () {
+    $medium = Medium::factory()->create([
+        'path' => 'portraits/maria.jpg',
     ]);
 
-    SubpageItem::factory()->create([
-        'title' => 'Mitgliedschaft fuer Familien',
-        'slug' => 'mitgliedschaft-fuer-familien',
-        'category' => 'membership-fee',
-        'sort_order' => 1,
+    $person = Person::factory()->for($medium, 'portrait')->create([
+        'display_name' => 'Maria Beckmann',
     ]);
 
-    SubpageItem::factory()->create([
-        'title' => 'Versteckter FAQ Eintrag',
-        'slug' => 'versteckter-faq-eintrag',
-        'category' => 'membership-faq',
-        'is_active' => false,
+    $role = Role::factory()->create([
+        'role_key' => 'vorsitzende',
+        'name' => 'Vorsitzende',
     ]);
 
-    $this->getJson('/api/subpage-items')
+    $assignment = RoleAssignment::factory()->for($person)->for($role)->create([
+        'label_override' => '1. Vorsitzende',
+    ]);
+
+    $this->getJson('/api/people')
         ->assertSuccessful()
-        ->assertJsonCount(2, 'data')
-        ->assertJsonPath('data.0.category', 'history')
-        ->assertJsonPath('data.1.category', 'membership-fee');
+        ->assertJsonPath('data.0.display_name', 'Maria Beckmann')
+        ->assertJsonPath('data.0.portrait.path', 'portraits/maria.jpg');
+
+    $this->getJson('/api/roles/vorsitzende')
+        ->assertSuccessful()
+        ->assertJsonPath('data.role_key', 'vorsitzende')
+        ->assertJsonPath('data.assignments.0.person.display_name', 'Maria Beckmann');
+
+    $this->getJson('/api/role-assignments/'.$assignment->id)
+        ->assertSuccessful()
+        ->assertJsonPath('data.label_override', '1. Vorsitzende')
+        ->assertJsonPath('data.role.role_key', 'vorsitzende');
 });
 
-it('returns structured items filtered by category', function () {
-    SubpageItem::factory()->create([
-        'title' => 'WhatsApp Kanal',
-        'slug' => 'whatsapp-kanal',
-        'category' => 'newsletter-channel',
+it('returns media and users', function () {
+    $medium = Medium::factory()->create([
+        'filename' => 'fest.jpg',
+        'path' => 'uploads/fest.jpg',
     ]);
 
-    SubpageItem::factory()->create([
-        'title' => 'Kontakt per Mail',
-        'slug' => 'kontakt-per-mail',
-        'category' => 'contact-option',
+    $user = User::factory()->admin()->create([
+        'name' => 'Admin User',
+        'email' => 'admin@example.com',
     ]);
 
-    $this->getJson('/api/subpage-items/category/newsletter-channel')
+    $this->getJson('/api/media/'.$medium->id)
+        ->assertSuccessful()
+        ->assertJsonPath('data.filename', 'fest.jpg')
+        ->assertJsonPath('data.path', 'uploads/fest.jpg');
+
+    $this->getJson('/api/users')
         ->assertSuccessful()
         ->assertJsonCount(1, 'data')
-        ->assertJsonPath('data.0.slug', 'whatsapp-kanal')
-        ->assertJsonPath('data.0.category_label', 'Newsletter');
-});
+        ->assertJsonPath('data.0.name', 'Admin User')
+        ->assertJsonMissingPath('data.0.password');
 
-it('returns a single structured subpage item by slug', function () {
-    $item = SubpageItem::factory()->create([
-        'title' => 'Fotoalbum Sommer',
-        'slug' => 'fotoalbum-sommer',
-        'category' => 'gallery-photo',
-    ]);
-
-    $this->getJson('/api/subpage-items/'.$item->slug)
+    $this->getJson('/api/users/'.$user->id)
         ->assertSuccessful()
-        ->assertJsonPath('data.title', 'Fotoalbum Sommer')
-        ->assertJsonPath('data.category_label', 'Fotos');
+        ->assertJsonPath('data.email', 'admin@example.com')
+        ->assertJsonPath('data.is_admin', true);
 });

@@ -1,95 +1,105 @@
 <?php
 
-use App\Models\ClubEvent;
-use App\Models\TeamMember;
+use App\Models\Competition;
+use App\Models\CompetitionResult;
+use App\Models\CompetitionResultCategory;
+use App\Models\CompetitionType;
+use App\Models\Event;
+use App\Models\Person;
+use App\Models\PlaqueAwardRule;
+use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('returns active club events ordered by featured flag and start date', function () {
-    ClubEvent::factory()->create([
-        'title' => 'Spaeter Termin',
-        'slug' => 'spaeter-termin',
-        'starts_at' => now()->addDays(10),
-        'is_featured' => false,
+it('returns venues and events with competition data', function () {
+    $venue = Venue::factory()->create([
+        'name' => 'Schuetzenhalle',
     ]);
 
-    ClubEvent::factory()->create([
-        'title' => 'Hervorgehobener Termin',
-        'slug' => 'hervorgehobener-termin',
-        'starts_at' => now()->addDays(20),
-        'is_featured' => true,
+    $event = Event::factory()->for($venue)->create([
+        'slug' => 'fruehjahrsschiessen',
+        'title' => 'Fruehjahrsschiessen',
     ]);
 
-    ClubEvent::factory()->create([
-        'title' => 'Inaktiver Termin',
-        'slug' => 'inaktiver-termin',
-        'starts_at' => now()->addDays(1),
-        'is_active' => false,
+    $type = CompetitionType::factory()->create([
+        'type_key' => 'pokal',
+        'name' => 'Pokal',
     ]);
 
-    $response = $this->getJson('/api/events');
+    Competition::factory()->for($type, 'type')->for($event)->create([
+        'title' => 'Pokalrunde',
+        'year' => 2026,
+    ]);
 
-    $response
+    $this->getJson('/api/venues')
         ->assertSuccessful()
-        ->assertJsonCount(2, 'data')
-        ->assertJsonPath('data.0.slug', 'hervorgehobener-termin')
-        ->assertJsonPath('data.1.slug', 'spaeter-termin');
+        ->assertJsonPath('data.0.name', 'Schuetzenhalle')
+        ->assertJsonPath('data.0.events.0.slug', 'fruehjahrsschiessen');
+
+    $this->getJson('/api/events/fruehjahrsschiessen')
+        ->assertSuccessful()
+        ->assertJsonPath('data.slug', 'fruehjahrsschiessen')
+        ->assertJsonPath('data.venue.name', 'Schuetzenhalle')
+        ->assertJsonPath('data.competitions.0.title', 'Pokalrunde');
 });
 
-it('returns a single active club event by slug', function () {
-    $event = ClubEvent::factory()->create([
-        'title' => 'Sommerfest',
-        'slug' => 'sommerfest',
+it('returns competition types and competitions by their route keys', function () {
+    $type = CompetitionType::factory()->create([
+        'type_key' => 'plakette',
+        'name' => 'Plakette',
     ]);
 
-    $this->getJson('/api/events/'.$event->slug)
+    $competition = Competition::factory()->for($type, 'type')->create([
+        'title' => 'Plakettenrunde',
+        'year' => 2025,
+    ]);
+
+    $this->getJson('/api/competition-types/plakette')
         ->assertSuccessful()
-        ->assertJsonPath('data.title', 'Sommerfest');
+        ->assertJsonPath('data.type_key', 'plakette')
+        ->assertJsonPath('data.competitions.0.title', 'Plakettenrunde');
+
+    $this->getJson('/api/competitions/'.$competition->id)
+        ->assertSuccessful()
+        ->assertJsonPath('data.id', $competition->id)
+        ->assertJsonPath('data.type.type_key', 'plakette');
 });
 
-it('returns active team members grouped by team type and sort order', function () {
-    TeamMember::factory()->create([
-        'name' => 'Beauftragte B',
-        'slug' => 'beauftragte-b',
-        'team_type' => 'delegate',
-        'sort_order' => 1,
+it('returns result categories, results and plaque award rules', function () {
+    $competition = Competition::factory()->create([
+        'title' => 'Koenigsschiessen',
     ]);
 
-    TeamMember::factory()->create([
-        'name' => 'Vorstand A',
-        'slug' => 'vorstand-a',
-        'team_type' => 'board',
-        'sort_order' => 5,
+    $category = CompetitionResultCategory::factory()->for($competition)->create([
+        'name' => 'Senioren',
     ]);
 
-    TeamMember::factory()->create([
-        'name' => 'Vorstand Z',
-        'slug' => 'vorstand-z',
-        'team_type' => 'board',
-        'sort_order' => 9,
-        'is_active' => false,
+    $person = Person::factory()->create([
+        'display_name' => 'Max Mustermann',
     ]);
 
-    $response = $this->getJson('/api/team-members');
+    $result = CompetitionResult::factory()->for($category, 'category')->for($person)->create([
+        'winner_name' => 'Max Mustermann',
+        'rank' => 1,
+    ]);
 
-    $response
+    $rule = PlaqueAwardRule::factory()->for($competition)->create([
+        'award_name' => 'Goldene Plakette',
+    ]);
+
+    $this->getJson('/api/competition-result-categories/'.$category->id)
         ->assertSuccessful()
-        ->assertJsonCount(2, 'data')
-        ->assertJsonPath('data.0.slug', 'vorstand-a')
-        ->assertJsonPath('data.0.team_type_label', 'Vorstand')
-        ->assertJsonPath('data.1.slug', 'beauftragte-b');
-});
+        ->assertJsonPath('data.name', 'Senioren')
+        ->assertJsonPath('data.results.0.winner_name', 'Max Mustermann');
 
-it('returns a single active team member by slug', function () {
-    $member = TeamMember::factory()->create([
-        'name' => 'Maria Beckmann',
-        'slug' => 'maria-beckmann',
-        'team_type' => 'board',
-    ]);
-
-    $this->getJson('/api/team-members/'.$member->slug)
+    $this->getJson('/api/competition-results/'.$result->id)
         ->assertSuccessful()
-        ->assertJsonPath('data.name', 'Maria Beckmann')
-        ->assertJsonPath('data.team_type_label', 'Vorstand');
+        ->assertJsonPath('data.rank', 1)
+        ->assertJsonPath('data.person.display_name', 'Max Mustermann');
+
+    $this->getJson('/api/plaque-award-rules/'.$rule->id)
+        ->assertSuccessful()
+        ->assertJsonPath('data.award_name', 'Goldene Plakette')
+        ->assertJsonPath('data.competition.title', 'Koenigsschiessen');
 });

@@ -6,6 +6,7 @@ use App\Models\Chronicle;
 use App\Models\CompetitionType;
 use App\Models\ExternalLink;
 use App\Models\Page;
+use App\Models\PageSection;
 use App\Models\Role;
 use App\Models\Venue;
 use Illuminate\Database\Seeder;
@@ -19,6 +20,27 @@ class ContentFoundationSeeder extends Seeder
                 ['slug' => $page['slug']],
                 $page,
             );
+        }
+
+        foreach ($this->pageSections() as $slug => $sections) {
+            $page = Page::query()->where('slug', $slug)->first();
+
+            if ($page === null) {
+                continue;
+            }
+
+            foreach ($sections as $section) {
+                PageSection::query()->updateOrCreate(
+                    [
+                        'page_id' => $page->id,
+                        'section_key' => $section['section_key'],
+                    ],
+                    [
+                        ...$section,
+                        'page_id' => $page->id,
+                    ],
+                );
+            }
         }
 
         foreach ($this->links() as $link) {
@@ -61,7 +83,16 @@ class ContentFoundationSeeder extends Seeder
     {
         return [
             ['slug' => 'start', 'title' => 'Start', 'nav_label' => 'Start', 'status' => 'published', 'published_at' => now(), 'sort_order' => 0],
-            ['slug' => 'ueber-uns', 'title' => 'Über uns', 'nav_label' => 'Über uns', 'status' => 'published', 'published_at' => now(), 'sort_order' => 10],
+            [
+                'slug' => 'ueber-uns',
+                'title' => 'Über uns',
+                'nav_label' => 'Über uns',
+                'meta_title' => 'Über uns | St. Bernadus Tinnen',
+                'meta_description' => 'St. Bernadus Tinnen steht seit 1905 für gelebte Tradition, Gemeinschaft im Ort und verlässliches Vereinsleben über Generationen hinweg.',
+                'status' => 'published',
+                'published_at' => now(),
+                'sort_order' => 10,
+            ],
             ['slug' => 'ueber-uns/geschichte', 'title' => 'Geschichte', 'nav_label' => 'Geschichte', 'status' => 'published', 'published_at' => now(), 'sort_order' => 20],
             ['slug' => 'vorstand-team', 'title' => 'Vorstand & Team', 'nav_label' => 'Vorstand & Team', 'status' => 'published', 'published_at' => now(), 'sort_order' => 30],
             ['slug' => 'veranstaltungen', 'title' => 'Veranstaltungen', 'nav_label' => 'Veranstaltungen', 'status' => 'published', 'published_at' => now(), 'sort_order' => 40],
@@ -76,6 +107,93 @@ class ContentFoundationSeeder extends Seeder
             ['slug' => 'mitglied-werden/faq', 'title' => 'FAQ', 'nav_label' => 'FAQ', 'status' => 'published', 'published_at' => now(), 'sort_order' => 130],
             ['slug' => 'kontakt', 'title' => 'Kontakt', 'nav_label' => 'Kontakt', 'status' => 'published', 'published_at' => now(), 'sort_order' => 140],
             ['slug' => 'newsletter', 'title' => 'Newsletter', 'nav_label' => 'Newsletter', 'status' => 'published', 'published_at' => now(), 'sort_order' => 150],
+        ];
+    }
+
+    protected function pageSections(): array
+    {
+        return [
+            'ueber-uns' => [
+                [
+                    'section_key' => 'hero-about',
+                    'section_type' => 'hero',
+                    'title' => 'Ein Verein mit Geschichte und Haltung',
+                    'subtitle' => 'Über uns',
+                    'content' => 'St. Bernadus Tinnen steht seit 1905 für gelebte Tradition, Gemeinschaft im Ort und verlässliches Vereinsleben über Generationen hinweg.',
+                    'data' => [
+                        'accent' => 'primary',
+                    ],
+                    'sort_order' => 10,
+                ],
+                [
+                    'section_key' => 'about-overview',
+                    'section_type' => 'cards',
+                    'title' => 'Über unseren Verein',
+                    'content' => 'Der offizielle Webauftritt des Schützenvereins Tinnen verbindet aktuelle Informationen mit Vereinschronik. Besonders stark dokumentiert sind Königspaare, Kinderkönige, Funktionäre und der Jahreskalender.',
+                    'data' => [
+                        'layout' => 'grid-4',
+                        'items' => [
+                            [
+                                'title' => 'Chronik',
+                                'content' => 'Mit Thron 2000 bis heute und Kinderkönig dokumentiert die Originalseite zentrale Teile der Vereinsgeschichte.',
+                                'icon' => 'scroll-text',
+                            ],
+                            [
+                                'title' => 'Funktionäre',
+                                'content' => 'Die Vereinsseite nennt die aktuellen Funktionsträger und macht Zuständigkeiten im Vorstand sichtbar.',
+                                'icon' => 'users',
+                            ],
+                            [
+                                'title' => 'Termine',
+                                'content' => 'Der Jahreskalender 2026 enthält Versammlungen, Schützenfest, Plakettenschießen und weitere Vereinstermine.',
+                                'icon' => 'calendar-days',
+                            ],
+                            [
+                                'title' => 'Service',
+                                'content' => 'Flyer, WhatsApp-Newsletter und weitere praktische Hinweise ergänzen die eigentlichen Vereinsinhalte.',
+                                'icon' => 'download',
+                            ],
+                        ],
+                    ],
+                    'sort_order' => 20,
+                ],
+                [
+                    'section_key' => 'history-meaning',
+                    'section_type' => 'rich_text',
+                    'title' => 'Geschichte & Bedeutung',
+                    'content' => "Seit 1905 ist der Verein Teil des Dorflebens in Tinnen. Die online zugängliche Chronik zeigt, wie eng Schützenfest, Königswürde und ehrenamtliche Organisation über Jahrzehnte miteinander verbunden sind.\n\nInhaltlich setzt die Originalseite klare Schwerpunkte: dokumentierte Thronfolgen, Kinderkönige, Funktionärslisten, Veranstaltungskalender und praktische Vereinsinformationen wie Flyer oder WhatsApp-Newsletter.",
+                    'data' => [
+                        'anchor' => 'history',
+                    ],
+                    'sort_order' => 30,
+                ],
+                [
+                    'section_key' => 'about-highlights',
+                    'section_type' => 'cards',
+                    'title' => 'Schwerpunkte der Website',
+                    'content' => 'Die wichtigsten Inhalte des Vereinsauftritts lassen sich in drei Themenblöcke gliedern.',
+                    'data' => [
+                        'layout' => 'grid-3',
+                        'items' => [
+                            [
+                                'title' => 'Chronikseiten',
+                                'content' => 'Die Vereinswebsite stellt mit "Thron 2000 bis heute" und "Kinderkönig" zwei gut gepflegte Chronikbereiche bereit.',
+                            ],
+                            [
+                                'title' => 'Vereinsalltag',
+                                'content' => 'Termine, Pokalschießen, Plakettenschießen, Schützenfest und Winterfest prägen den öffentlich sichtbaren Jahreslauf.',
+                            ],
+                            [
+                                'title' => 'Offizielle Quelle',
+                                'content' => 'Für PDFs, den vollständigen Kalender und die laufend gepflegten Detailseiten verweist diese Website auf den offiziellen Vereinsauftritt.',
+                                'link_label' => 'Offizielle Website besuchen',
+                                'link_url' => 'https://www.schuetzenverein-tinnen.de/',
+                            ],
+                        ],
+                    ],
+                    'sort_order' => 40,
+                ],
+            ],
         ];
     }
 

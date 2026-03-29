@@ -10,14 +10,19 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class MediumResource extends Resource
 {
@@ -41,34 +46,74 @@ class MediumResource extends Resource
     {
         return $schema
             ->components([
+                FileUpload::make('path')
+                    ->label('Bild')
+                    ->image()
+                    ->disk('public')
+                    ->directory('media')
+                    ->required()
+                    ->openable()
+                    ->downloadable()
+                    ->imageEditor()
+                    ->afterStateUpdated(function (Set $set, mixed $state): void {
+                        if (! $state instanceof TemporaryUploadedFile) {
+                            return;
+                        }
+
+                        static::populateImageMetadata($set, $state);
+                    }),
                 TextInput::make('title')
                     ->maxLength(255),
-                TextInput::make('disk')
-                    ->default('public')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('path')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('filename')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('mime_type')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('extension')
-                    ->maxLength(50),
-                TextInput::make('size')
-                    ->numeric(),
-                TextInput::make('width')
-                    ->numeric(),
-                TextInput::make('height')
-                    ->numeric(),
                 Textarea::make('alt_text')
                     ->label('Alternativtext')
                     ->rows(2)
                     ->columnSpanFull(),
+                Hidden::make('disk')
+                    ->default('public')
+                    ->required(),
+                Hidden::make('filename')
+                    ->required(),
+                Hidden::make('mime_type')
+                    ->required(),
+                Hidden::make('extension'),
+                Hidden::make('size'),
+                Hidden::make('width'),
+                Hidden::make('height'),
             ]);
+    }
+
+    protected static function populateImageMetadata(Set $set, TemporaryUploadedFile $file): void
+    {
+        $set('disk', 'public');
+        $set('filename', $file->getClientOriginalName());
+        $set('mime_type', $file->getMimeType() ?? 'application/octet-stream');
+        $set('extension', Str::lower($file->getClientOriginalExtension()));
+        $set('size', $file->getSize());
+
+        ['width' => $width, 'height' => $height] = static::getImageDimensions($file);
+
+        $set('width', $width);
+        $set('height', $height);
+    }
+
+    /**
+     * @return array{width: int|null, height: int|null}
+     */
+    protected static function getImageDimensions(TemporaryUploadedFile $file): array
+    {
+        $dimensions = @getimagesize($file->getRealPath());
+
+        if (! is_array($dimensions)) {
+            return [
+                'width' => null,
+                'height' => null,
+            ];
+        }
+
+        return [
+            'width' => $dimensions[0] ?? null,
+            'height' => $dimensions[1] ?? null,
+        ];
     }
 
     public static function table(Table $table): Table

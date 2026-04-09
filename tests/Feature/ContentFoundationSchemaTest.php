@@ -25,6 +25,8 @@ it('creates the planned core content tables', function () {
         'competition_result_categories',
         'competition_results',
         'plaque_award_rules',
+        'competition_milestone_awards',
+        'competition_score_awards',
     ];
 
     foreach ($tables as $table) {
@@ -67,7 +69,7 @@ it('seeds the expected reference records for the slim content backend', function
     $this->seed(ContentFoundationSeeder::class);
 
     expect(DB::table('pages')->count())->toBe(16);
-    expect(DB::table('external_links')->count())->toBe(10);
+    expect(DB::table('external_links')->count())->toBe(12);
     expect(DB::table('roles')->orderBy('sort_order')->pluck('role_key')->all())->toBe([
         'vorsitzender',
         'oberst',

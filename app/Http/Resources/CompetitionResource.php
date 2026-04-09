@@ -22,6 +22,8 @@ class CompetitionResource extends JsonResource
             'description' => $this->description,
             'source_url' => $this->source_url,
             'sort_order' => $this->sort_order,
+            'status' => $this->status,
+            'published_at' => $this->serializeDate($this->published_at),
             'type' => new CompetitionTypeResource($this->whenLoaded('type')),
             'event' => new EventResource($this->whenLoaded('event')),
             'result_categories' => CompetitionResultCategoryResource::collection($this->whenLoaded('resultCategories')),

@@ -194,6 +194,82 @@ class ContentFoundationSeeder extends Seeder
                     'sort_order' => 40,
                 ],
             ],
+            'mitglied-werden' => [
+                [
+                    'section_key' => 'membership-hero',
+                    'section_type' => 'hero',
+                    'title' => 'Mitglied werden',
+                    'subtitle' => 'Gemeinschaft vor Ort',
+                    'content' => 'Die Originalseite bündelt hier praktische Informationen, Downloads und Kontaktwege für alle, die sich dem Verein anschließen möchten.',
+                    'data' => [
+                        'accent' => 'primary',
+                    ],
+                    'sort_order' => 10,
+                ],
+                [
+                    'section_key' => 'membership-offers',
+                    'section_type' => 'cards',
+                    'title' => 'Alles für den Einstieg',
+                    'content' => 'Die wichtigsten Einstiegspunkte stehen kompakt an einer Stelle bereit.',
+                    'data' => [
+                        'layout' => 'grid-2',
+                        'items' => [
+                            [
+                                'title' => 'Beitrittserklärung',
+                                'content' => 'Eigene Seite oder Download zur Mitgliedschaft mit allen formalen Informationen.',
+                                'link_label' => 'Zum Antrag',
+                                'link_url' => 'https://www.bernadus.example/antrag',
+                            ],
+                            [
+                                'title' => 'Flyer',
+                                'content' => 'Kompakter Überblick über Verein, Termine und das, was neue Mitglieder erwartet.',
+                                'link_label' => 'Flyer öffnen',
+                                'link_url' => 'https://www.bernadus.example/flyer',
+                            ],
+                        ],
+                    ],
+                    'sort_order' => 20,
+                ],
+                [
+                    'section_key' => 'practical-note-1',
+                    'section_type' => 'notice',
+                    'title' => 'Wichtiger Hinweis',
+                    'content' => 'Für aktuelle Formulare bleibt die offizielle Quelle des Vereins maßgeblich.',
+                    'data' => [
+                        'tone' => 'info',
+                    ],
+                    'sort_order' => 30,
+                ],
+                [
+                    'section_key' => 'practical-note-2',
+                    'section_type' => 'notice',
+                    'title' => 'Kontakt',
+                    'content' => 'Kontaktanfragen können direkt auf die offizielle Vereinsseite oder an die dort genannten Ansprechpartner weitergeleitet werden.',
+                    'data' => [
+                        'tone' => 'info',
+                    ],
+                    'sort_order' => 40,
+                ],
+                [
+                    'section_key' => 'membership-faq',
+                    'section_type' => 'faq',
+                    'title' => 'Häufige Fragen',
+                    'content' => null,
+                    'data' => [
+                        'items' => [
+                            [
+                                'title' => 'Wo finde ich die Beitrittserklärung?',
+                                'content' => 'Über den offiziellen Menüpunkt oder die verlinkte Formularseite des Vereins.',
+                            ],
+                            [
+                                'title' => 'Gibt es hier offizielle Beitragssätze?',
+                                'content' => 'Nur, wenn sie ausdrücklich in der Datenquelle gepflegt und veröffentlicht wurden.',
+                            ],
+                        ],
+                    ],
+                    'sort_order' => 50,
+                ],
+            ],
         ];
     }
 
@@ -207,6 +283,8 @@ class ContentFoundationSeeder extends Seeder
             ['link_key' => 'official_calendar', 'label' => 'Kalender', 'url' => 'https://www.bernadus.example/kalender', 'description' => null],
             ['link_key' => 'official_flyer', 'label' => 'Flyer', 'url' => 'https://www.bernadus.example/flyer', 'description' => null],
             ['link_key' => 'official_contact', 'label' => 'Kontakt', 'url' => 'https://www.bernadus.example/kontakt', 'description' => null],
+            ['link_key' => 'page.mitglied-werden.flyer', 'label' => 'Flyer Mitglied werden', 'url' => 'https://www.bernadus.example/flyer', 'description' => 'Flyer zur Mitgliedschaft'],
+            ['link_key' => 'page.mitglied-werden.contact', 'label' => 'Kontakt Mitglied werden', 'url' => 'https://www.bernadus.example/kontakt', 'description' => 'Kontakt zur Mitgliedschaft'],
             ['link_key' => 'official_whatsapp', 'label' => 'WhatsApp', 'url' => 'https://chat.whatsapp.com/example', 'description' => null],
             ['link_key' => 'official_trophy_shooting', 'label' => 'Pokalschießen', 'url' => 'https://www.bernadus.example/pokalschiessen', 'description' => null],
             ['link_key' => 'official_plaque_shooting', 'label' => 'Plakettenschießen', 'url' => 'https://www.bernadus.example/plakettenschiessen', 'description' => null],

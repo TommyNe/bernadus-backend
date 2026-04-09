@@ -24,6 +24,8 @@ class CompetitionFactory extends Factory
             'description' => fake()->optional()->sentence(),
             'source_url' => fake()->optional()->url(),
             'sort_order' => fake()->numberBetween(0, 10),
+            'status' => 'published',
+            'published_at' => now(),
         ];
     }
 }

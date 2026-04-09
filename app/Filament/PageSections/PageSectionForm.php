@@ -29,7 +29,7 @@ class PageSectionForm
 
         $components[] = TextInput::make('section_key')
             ->label('Section-Key')
-            ->helperText('Empfohlene Keys für "Über uns": hero-about, about-overview, history-meaning, about-highlights.')
+            ->helperText('Empfohlene Keys für "Über uns": hero-about, about-overview, history-meaning, about-highlights. Für "Mitglied werden": membership-hero, membership-offers, practical-note-1, practical-note-2, membership-faq.')
             ->maxLength(255);
 
         $components[] = Select::make('section_type')
@@ -102,6 +102,19 @@ class PageSectionForm
             ])
             ->native(false)
             ->visible(fn (Get $get): bool => $get('section_type') === 'notice');
+
+        $components[] = Repeater::make('data.notes')
+            ->label('Hinweise')
+            ->schema([
+                Textarea::make('content')
+                    ->label('Hinweis')
+                    ->rows(3)
+                    ->required()
+                    ->columnSpanFull(),
+            ])
+            ->itemLabel(fn (array $state): ?string => $state['content'] ?? null)
+            ->visible(fn (Get $get): bool => $get('section_type') === 'notice')
+            ->columnSpanFull();
 
         $components[] = KeyValue::make('data.meta')
             ->label('Zusatzdaten')

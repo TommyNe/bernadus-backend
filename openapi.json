@@ -25,6 +25,7 @@
     { "name": "Chronicles" },
     { "name": "Chronicle Entries" },
     { "name": "Media" },
+    { "name": "Gallery" },
     { "name": "People" },
     { "name": "Roles" },
     { "name": "Role Assignments" },
@@ -45,6 +46,52 @@
               }
             }
           }
+        }
+      }
+    },
+    "/api/pages/{slug}/content": {
+      "get": {
+        "tags": ["Pages"],
+        "summary": "Liefert strukturierte Seiteninhalte per Slug",
+        "operationId": "showPageContent",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Slug einer Seite"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Seiteninhalt gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "slug": { "type": "string" },
+                        "title": { "type": "string" },
+                        "intro": { "type": ["string", "null"] },
+                        "flyerUrl": { "type": ["string", "null"], "format": "uri" },
+                        "contactUrl": { "type": ["string", "null"], "format": "uri" },
+                        "membershipOffers": { "type": "array", "items": { "type": "object" } },
+                        "practicalNotes": { "type": "array", "items": { "type": "string" } },
+                        "faq": { "type": "array", "items": { "type": "object" } },
+                        "meta": { "type": "object" }
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
         }
       }
     },
@@ -264,6 +311,78 @@
         }
       }
     },
+    "/api/competitions/plaque-shooting": {
+      "get": {
+        "tags": ["Competitions"],
+        "summary": "Listet veroeffentlichte Plakettenschießen",
+        "operationId": "listPlaqueShootingCompetitions",
+        "responses": {
+          "200": {
+            "description": "Plakettenschießen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ShootingCompetitionFeedResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competitions/plaque-shooting/{year}": {
+      "get": {
+        "tags": ["Competitions"],
+        "summary": "Liefert ein veroeffentlichtes Plakettenschießen per Jahr",
+        "operationId": "showPlaqueShootingCompetition",
+        "parameters": [{ "$ref": "#/components/parameters/CompetitionYear" }],
+        "responses": {
+          "200": {
+            "description": "Plakettenschießen gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ShootingCompetition" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/competitions/trophy-shooting": {
+      "get": {
+        "tags": ["Competitions"],
+        "summary": "Listet veroeffentlichte Pokalschießen",
+        "operationId": "listTrophyShootingCompetitions",
+        "responses": {
+          "200": {
+            "description": "Pokalschießen erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ShootingCompetitionFeedResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/competitions/trophy-shooting/{year}": {
+      "get": {
+        "tags": ["Competitions"],
+        "summary": "Liefert ein veroeffentlichtes Pokalschießen per Jahr",
+        "operationId": "showTrophyShootingCompetition",
+        "parameters": [{ "$ref": "#/components/parameters/CompetitionYear" }],
+        "responses": {
+          "200": {
+            "description": "Pokalschießen gefunden",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ShootingCompetition" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
     "/api/competitions/{value}": {
       "get": {
         "tags": ["Competitions"],
@@ -280,6 +399,80 @@
             }
           },
           "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/admin/competitions/trophy-shooting": {
+      "post": {
+        "tags": ["Competitions"],
+        "summary": "Legt ein Pokalschießen an",
+        "operationId": "storeTrophyShootingCompetition",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "year": { "type": "integer" },
+                  "title": { "type": "string" },
+                  "description": { "type": ["string", "null"] },
+                  "source_url": { "type": ["string", "null"], "format": "uri" },
+                  "sort_order": { "type": ["integer", "null"] },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "sort_order": { "type": ["integer", "null"] },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "person_id": { "type": ["integer", "null"] },
+                              "winner_name": { "type": "string" },
+                              "rank": { "type": "integer" },
+                              "score": { "type": ["number", "null"] },
+                              "score_text": { "type": ["string", "null"] }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": ["year", "title", "categories"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pokalschießen angelegt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "id": { "type": "integer" }
+                  },
+                  "required": ["message", "id"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Nicht authentifiziert"
+          },
+          "403": {
+            "description": "Nicht berechtigt"
+          },
+          "422": {
+            "description": "Validierungsfehler"
+          }
         }
       }
     },
@@ -474,6 +667,42 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/MediumCollectionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/gallery": {
+      "get": {
+        "tags": ["Gallery"],
+        "summary": "Listet aktive Galerie-Bilder",
+        "operationId": "listGalleryImages",
+        "responses": {
+          "200": {
+            "description": "Galerie-Bilder erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": { "type": "string" },
+                          "image_url": { "type": "string", "format": "uri" },
+                          "sort_order": { "type": "integer" },
+                          "alt_text": { "type": ["string", "null"] },
+                          "is_active": { "type": "boolean" }
+                        },
+                        "required": ["title", "image_url", "sort_order", "alt_text", "is_active"]
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
               }
             }
           }
@@ -684,6 +913,13 @@
         "schema": { "type": "string" },
         "description": "Schluessel eines Wettbewerbstyps"
       },
+      "CompetitionYear": {
+        "name": "year",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "minimum": 1900, "maximum": 2100 },
+        "description": "Jahr eines Wettbewerbs"
+      },
       "ChronicleKey": {
         "name": "value",
         "in": "path",
@@ -844,7 +1080,9 @@
               "title": { "type": "string" },
               "description": { "type": ["string", "null"] },
               "source_url": { "type": ["string", "null"], "format": "uri" },
-              "sort_order": { "type": "integer" }
+              "sort_order": { "type": "integer" },
+              "status": { "type": "string", "enum": ["draft", "published"] },
+              "published_at": { "type": ["string", "null"], "format": "date-time" }
             }
           }
         ]
@@ -986,6 +1224,62 @@
             }
           }
         ]
+      },
+      "ShootingCompetition": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "type_key": { "type": ["string", "null"] },
+          "year": { "type": ["integer", "null"] },
+          "title": { "type": "string" },
+          "description": { "type": ["string", "null"] },
+          "source_url": { "type": ["string", "null"], "format": "uri" },
+          "sort_order": { "type": "integer" },
+          "status": { "type": "string", "enum": ["draft", "published"] },
+          "published_at": { "type": ["string", "null"], "format": "date-time" },
+          "event": {
+            "type": ["object", "null"],
+            "properties": {
+              "id": { "type": "integer" },
+              "slug": { "type": "string" },
+              "title": { "type": "string" },
+              "display_date_text": { "type": ["string", "null"] },
+              "starts_at": { "type": ["string", "null"], "format": "date-time" },
+              "ends_at": { "type": ["string", "null"], "format": "date-time" },
+              "month_label": { "type": ["string", "null"] },
+              "audience_text": { "type": ["string", "null"] }
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer" },
+                "name": { "type": "string" },
+                "sort_order": { "type": "integer" },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "rank": { "type": "integer" },
+                      "winner_name": { "type": "string" },
+                      "person_id": { "type": ["integer", "null"] },
+                      "score": { "type": ["string", "number", "null"] },
+                      "score_text": { "type": ["string", "null"] }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "award_rules": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PlaqueAwardRuleSummary" }
+          }
+        }
       },
       "PersonSummary": {
         "allOf": [
@@ -1328,6 +1622,18 @@
           "data": { "$ref": "#/components/schemas/Competition" }
         },
         "required": ["data"]
+      },
+      "ShootingCompetitionFeedResponse": {
+        "type": "object",
+        "properties": {
+          "type_key": { "type": "string" },
+          "title": { "type": "string" },
+          "competitions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ShootingCompetition" }
+          }
+        },
+        "required": ["type_key", "title", "competitions"]
       },
       "CompetitionResultCategoryCollectionResponse": {
         "type": "object",

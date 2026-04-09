@@ -12,11 +12,13 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Validation\Rules\Unique;
 
 class CompetitionResultResource extends Resource
 {
@@ -43,6 +45,7 @@ class CompetitionResultResource extends Resource
                     ->label('Ergebnisgruppe')
                     ->searchable()
                     ->preload()
+                    ->live()
                     ->required(),
                 Select::make('person_id')
                     ->relationship('person', 'display_name')
@@ -55,7 +58,13 @@ class CompetitionResultResource extends Resource
                 TextInput::make('rank')
                     ->label('Platz')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->unique(
+                        ignoreRecord: true,
+                        modifyRuleUsing: function (Unique $rule, Get $get): Unique {
+                            return $rule->where('competition_result_category_id', $get('competition_result_category_id'));
+                        }
+                    ),
                 TextInput::make('score')
                     ->label('Punktzahl')
                     ->numeric(),

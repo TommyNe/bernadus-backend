@@ -11,6 +11,11 @@ Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
 
+Route::inertia('galerie', 'gallery', [
+    'galleryEndpoint' => '/api/gallery',
+    'pageTitle' => 'Galerie',
+])->name('gallery');
+
 Route::get('openapi.json', [OpenApiDocumentationController::class, 'json'])
     ->withoutMiddleware([
         StartSession::class,

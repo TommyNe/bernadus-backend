@@ -8,19 +8,24 @@ use App\Http\Controllers\Api\CompetitionResultController;
 use App\Http\Controllers\Api\CompetitionTypeController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ExternalLinkController;
+use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\MediumController;
+use App\Http\Controllers\Api\PageContentController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\PageSectionController;
 use App\Http\Controllers\Api\PersonController;
 use App\Http\Controllers\Api\PlaqueAwardRuleController;
+use App\Http\Controllers\Api\PlaqueShootingCompetitionController;
 use App\Http\Controllers\Api\RoleAssignmentController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\TrophyShootingCompetitionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VenueController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('pages')->name('api.pages.')->group(function (): void {
     Route::get('/', [PageController::class, 'index'])->name('index');
+    Route::get('{slug}/content', [PageContentController::class, 'show'])->name('content');
     Route::get('{value}', [PageController::class, 'show'])->name('show');
 });
 
@@ -51,7 +56,15 @@ Route::prefix('competition-types')->name('api.competition-types.')->group(functi
 
 Route::prefix('competitions')->name('api.competitions.')->group(function (): void {
     Route::get('/', [CompetitionController::class, 'index'])->name('index');
+    Route::get('plaque-shooting', [PlaqueShootingCompetitionController::class, 'index'])->name('plaque-shooting.index');
+    Route::get('plaque-shooting/{year}', [PlaqueShootingCompetitionController::class, 'show'])->name('plaque-shooting.show');
+    Route::get('trophy-shooting', [TrophyShootingCompetitionController::class, 'index'])->name('trophy-shooting.index');
+    Route::get('trophy-shooting/{year}', [TrophyShootingCompetitionController::class, 'show'])->name('trophy-shooting.show');
     Route::get('{value}', [CompetitionController::class, 'show'])->name('show');
+});
+
+Route::prefix('admin/competitions')->name('api.admin.competitions.')->middleware('auth')->group(function (): void {
+    Route::post('trophy-shooting', [TrophyShootingCompetitionController::class, 'store'])->name('trophy-shooting.store');
 });
 
 Route::prefix('competition-result-categories')->name('api.competition-result-categories.')->group(function (): void {
@@ -82,6 +95,10 @@ Route::prefix('chronicle-entries')->name('api.chronicle-entries.')->group(functi
 Route::prefix('media')->name('api.media.')->group(function (): void {
     Route::get('/', [MediumController::class, 'index'])->name('index');
     Route::get('{value}', [MediumController::class, 'show'])->name('show');
+});
+
+Route::prefix('gallery')->name('api.gallery.')->group(function (): void {
+    Route::get('/', [GalleryController::class, 'index'])->name('index');
 });
 
 Route::prefix('people')->name('api.people.')->group(function (): void {

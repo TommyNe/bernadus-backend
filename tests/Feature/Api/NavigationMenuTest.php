@@ -9,6 +9,7 @@ it('registers the project api routes', function () {
 
     expect($routes)->toContain(
         'api.pages.index',
+        'api.pages.content',
         'api.page-sections.show',
         'api.external-links.show',
         'api.venues.index',

@@ -173,6 +173,8 @@ it('serializes events, venues, competitions and results', function () {
         ->and($typePayload['competitions'][0]['title'])->toBe('Pokalrunde')
         ->and($competitionPayload['title'])->toBe('Pokalrunde')
         ->and($competitionPayload['type']['type_key'])->toBe('pokal')
+        ->and($competitionPayload['status'])->toBe('published')
+        ->and($competitionPayload['published_at'])->toBeString()
         ->and($competitionPayload['event']['slug'])->toBe('fruehjahrsschiessen')
         ->and($competitionPayload['result_categories'][0]['name'])->toBe('Senioren')
         ->and($competitionPayload['plaque_award_rules'][0]['award_name'])->toBe('Goldene Plakette')

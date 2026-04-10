@@ -10,6 +10,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ContentFoundationSeeder::class,
+            TrophyShootingSeeder::class,
+            PlaqueShootingSeeder::class,
             AdminUserSeeder::class,
         ]);
     }

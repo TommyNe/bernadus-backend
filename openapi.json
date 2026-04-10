@@ -32,6 +32,45 @@
     { "name": "Users" }
   ],
   "paths": {
+    "/api/contact": {
+      "get": {
+        "tags": ["Pages"],
+        "summary": "Liefert strukturierte Kontaktinhalte",
+        "operationId": "showContactContent",
+        "responses": {
+          "200": {
+            "description": "Kontaktinhalt gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "slug": { "type": "string", "example": "kontakt" },
+                        "title": { "type": "string", "example": "Kontakt" },
+                        "hero": { "type": "object" },
+                        "intro": { "type": ["string", "null"] },
+                        "introTitle": { "type": ["string", "null"] },
+                        "contactUrl": { "type": ["string", "null"], "format": "uri" },
+                        "contactCards": { "type": "array", "items": { "type": "object" } },
+                        "officialLinks": { "type": "array", "items": { "type": "object" } },
+                        "address": { "type": ["object", "null"] },
+                        "notes": { "type": "array", "items": { "type": "object" } },
+                        "meta": { "type": "object" }
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
     "/api/pages": {
       "get": {
         "tags": ["Pages"],

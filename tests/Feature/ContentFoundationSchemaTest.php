@@ -68,7 +68,7 @@ it('applies core defaults and foreign keys for the editorial schema', function (
 it('seeds the expected reference records for the slim content backend', function () {
     $this->seed(ContentFoundationSeeder::class);
 
-    expect(DB::table('pages')->count())->toBe(16);
+    expect(DB::table('pages')->count())->toBe(18);
     expect(DB::table('external_links')->count())->toBe(12);
     expect(DB::table('roles')->orderBy('sort_order')->pluck('role_key')->all())->toBe([
         'vorsitzender',

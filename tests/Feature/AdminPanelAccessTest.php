@@ -1,6 +1,7 @@
 <?php
 
 use App\Filament\Pages\ContentOverviewPage;
+use App\Filament\Pages\MembershipContentPage;
 use App\Filament\Widgets\CurrentBoardWidget;
 use App\Filament\Widgets\DashboardStatsWidget;
 use App\Filament\Widgets\QuickLinksWidget;
@@ -10,6 +11,8 @@ use App\Models\Chronicle;
 use App\Models\ChronicleEntry;
 use App\Models\Event;
 use App\Models\ExternalLink;
+use App\Models\Flyer;
+use App\Models\JacketListing;
 use App\Models\Page;
 use App\Models\Person;
 use App\Models\Role;
@@ -47,6 +50,14 @@ it('renders the editorial dashboard and resources for admins', function () {
         'link_key' => 'official_contact',
     ]);
 
+    JacketListing::factory()->create([
+        'title' => 'Jacke Größe 50',
+    ]);
+
+    Flyer::factory()->create([
+        'title' => 'Vereinsflyer 2026',
+    ]);
+
     $this->actingAs($user)
         ->get('/admin')
         ->assertSuccessful()
@@ -57,6 +68,23 @@ it('renders the editorial dashboard and resources for admins', function () {
         ->assertSuccessful()
         ->assertSeeText('Seiten')
         ->assertSeeText('Startseite');
+
+    $this->actingAs($user)
+        ->get('/admin/jacket-listings')
+        ->assertSuccessful()
+        ->assertSeeText('Jackenbörse')
+        ->assertSeeText('Jacke Größe 50');
+
+    $this->actingAs($user)
+        ->get('/admin/flyers')
+        ->assertSuccessful()
+        ->assertSeeText('Flyer')
+        ->assertSeeText('Vereinsflyer 2026');
+
+    $this->actingAs($user)
+        ->get(MembershipContentPage::getUrl(panel: 'admin'))
+        ->assertSuccessful()
+        ->assertSeeText('Mitglied werden');
 
     $this->actingAs($user)
         ->get(ContentOverviewPage::getUrl(panel: 'admin'))

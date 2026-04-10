@@ -9,7 +9,8 @@ it('serves the openapi json document', function () {
         ->assertSuccessful()
         ->assertJsonPath('openapi', '3.1.0')
         ->assertJsonPath('info.title', 'Bernadus Backend API')
-        ->assertJsonPath('paths./api/pages.get.operationId', 'listPages');
+        ->assertJsonPath('paths./api/pages.get.operationId', 'listPages')
+        ->assertJsonPath('paths./api/contact.get.operationId', 'showContactContent');
 });
 
 it('serves the browser documentation page', function () {

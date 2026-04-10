@@ -22,6 +22,9 @@ it('registers the project api routes', function () {
         'api.chronicles.index',
         'api.chronicle-entries.show',
         'api.media.index',
+        'api.flyer.current',
+        'api.jackenboerse.index',
+        'api.jackenboerse.show',
         'api.people.show',
         'api.roles.index',
         'api.role-assignments.show',
@@ -33,4 +36,6 @@ it('returns not found for missing records', function () {
     $this->getJson('/api/pages/unbekannt')->assertNotFound();
     $this->getJson('/api/external-links/unbekannt')->assertNotFound();
     $this->getJson('/api/events/unbekannt')->assertNotFound();
+    $this->getJson('/api/flyer/current')->assertNotFound();
+    $this->getJson('/api/jackenboerse/999999')->assertNotFound();
 });

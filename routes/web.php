@@ -16,6 +16,11 @@ Route::inertia('galerie', 'gallery', [
     'pageTitle' => 'Galerie',
 ])->name('gallery');
 
+Route::inertia('kontakt', 'contact', [
+    'contentEndpoint' => '/api/pages/kontakt/content',
+    'pageTitle' => 'Kontakt',
+])->name('contact');
+
 Route::get('openapi.json', [OpenApiDocumentationController::class, 'json'])
     ->withoutMiddleware([
         StartSession::class,

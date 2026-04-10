@@ -54,6 +54,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 - Stick to existing directory structure; don't create new base folders without approval.
 - Do not change the application's dependencies without approval.
+- The related Next.js application lives in a different directory and is named `bernadus-tinnen`.
 
 ## Frontend Bundling
 

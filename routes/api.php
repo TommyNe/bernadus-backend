@@ -6,9 +6,12 @@ use App\Http\Controllers\Api\CompetitionController;
 use App\Http\Controllers\Api\CompetitionResultCategoryController;
 use App\Http\Controllers\Api\CompetitionResultController;
 use App\Http\Controllers\Api\CompetitionTypeController;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\CurrentFlyerController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ExternalLinkController;
 use App\Http\Controllers\Api\GalleryController;
+use App\Http\Controllers\Api\JacketListingController;
 use App\Http\Controllers\Api\MediumController;
 use App\Http\Controllers\Api\PageContentController;
 use App\Http\Controllers\Api\PageController;
@@ -22,6 +25,8 @@ use App\Http\Controllers\Api\TrophyShootingCompetitionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VenueController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('contact', ContactController::class)->name('api.contact.show');
 
 Route::prefix('pages')->name('api.pages.')->group(function (): void {
     Route::get('/', [PageController::class, 'index'])->name('index');
@@ -99,6 +104,15 @@ Route::prefix('media')->name('api.media.')->group(function (): void {
 
 Route::prefix('gallery')->name('api.gallery.')->group(function (): void {
     Route::get('/', [GalleryController::class, 'index'])->name('index');
+});
+
+Route::prefix('flyer')->name('api.flyer.')->group(function (): void {
+    Route::get('current', CurrentFlyerController::class)->name('current');
+});
+
+Route::prefix('jackenboerse')->name('api.jackenboerse.')->group(function (): void {
+    Route::get('/', [JacketListingController::class, 'index'])->name('index');
+    Route::get('{value}', [JacketListingController::class, 'show'])->name('show');
 });
 
 Route::prefix('people')->name('api.people.')->group(function (): void {

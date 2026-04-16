@@ -96,15 +96,13 @@ class ContentFoundationSeeder extends Seeder
             ['slug' => 'ueber-uns/geschichte', 'title' => 'Geschichte', 'nav_label' => 'Geschichte', 'status' => 'published', 'published_at' => now(), 'sort_order' => 20],
             ['slug' => 'vorstand-team', 'title' => 'Vorstand & Team', 'nav_label' => 'Vorstand & Team', 'status' => 'published', 'published_at' => now(), 'sort_order' => 30],
             ['slug' => 'veranstaltungen', 'title' => 'Veranstaltungen', 'nav_label' => 'Veranstaltungen', 'status' => 'published', 'published_at' => now(), 'sort_order' => 40],
-            ['slug' => 'veranstaltungen/kalender', 'title' => 'Kalender', 'nav_label' => 'Kalender', 'status' => 'published', 'published_at' => now(), 'sort_order' => 50],
             ['slug' => 'veranstaltungen/trainings', 'title' => 'Trainings', 'nav_label' => 'Trainings', 'status' => 'published', 'published_at' => now(), 'sort_order' => 60],
             ['slug' => 'veranstaltungen/plaketten-pokalschiessen', 'title' => 'Plaketten- und Pokalschießen', 'nav_label' => 'Plaketten & Pokale', 'status' => 'published', 'published_at' => now(), 'sort_order' => 70],
             ['slug' => 'galerie', 'title' => 'Galerie', 'nav_label' => 'Galerie', 'status' => 'published', 'published_at' => now(), 'sort_order' => 80],
-            ['slug' => 'mitglied-werden', 'title' => 'Mitglied werden', 'nav_label' => 'Infos', 'status' => 'published', 'published_at' => now(), 'sort_order' => 90],
-            ['slug' => 'mitglied-werden/flyer', 'title' => 'Flyer', 'nav_label' => 'Flyer', 'status' => 'published', 'published_at' => now(), 'sort_order' => 100],
-            ['slug' => 'mitglied-werden/jackenboerse', 'title' => 'Jackenbörse', 'nav_label' => 'Jackenbörse', 'status' => 'published', 'published_at' => now(), 'sort_order' => 110],
-            ['slug' => 'mitglied-werden/antrag', 'title' => 'Antrag', 'nav_label' => 'Antrag', 'status' => 'published', 'published_at' => now(), 'sort_order' => 120],
-            ['slug' => 'mitglied-werden/faq', 'title' => 'FAQ', 'nav_label' => 'FAQ', 'status' => 'published', 'published_at' => now(), 'sort_order' => 130],
+            ['slug' => 'infos', 'title' => 'Infos', 'nav_label' => 'Infos', 'status' => 'published', 'published_at' => now(), 'sort_order' => 90],
+            ['slug' => 'infos/flyer', 'title' => 'Flyer', 'nav_label' => 'Flyer', 'status' => 'published', 'published_at' => now(), 'sort_order' => 100],
+            ['slug' => 'infos/jackenboerse', 'title' => 'Jackenbörse', 'nav_label' => 'Jackenbörse', 'status' => 'published', 'published_at' => now(), 'sort_order' => 110],
+            ['slug' => 'infos/faq', 'title' => 'FAQ', 'nav_label' => 'FAQ', 'status' => 'published', 'published_at' => now(), 'sort_order' => 130],
             ['slug' => 'kontakt', 'title' => 'Kontakt', 'nav_label' => 'Kontakt', 'status' => 'published', 'published_at' => now(), 'sort_order' => 140],
             ['slug' => 'newsletter', 'title' => 'Newsletter', 'nav_label' => 'Newsletter', 'status' => 'published', 'published_at' => now(), 'sort_order' => 150],
             [
@@ -214,7 +212,7 @@ class ContentFoundationSeeder extends Seeder
                     'sort_order' => 40,
                 ],
             ],
-            'mitglied-werden' => [
+            'infos' => [
                 [
                     'section_key' => 'membership-hero',
                     'section_type' => 'hero',

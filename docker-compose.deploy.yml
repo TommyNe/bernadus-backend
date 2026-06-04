@@ -8,7 +8,7 @@ services:
       redis:
         condition: service_healthy
     environment:
-      APP_NAME: ${APP_NAME:-Laravel}
+      APP_NAME: Bernadus
       APP_ENV: ${APP_ENV:-production}
       APP_KEY: ${APP_KEY:?APP_KEY is required}
       APP_DEBUG: ${APP_DEBUG:-false}

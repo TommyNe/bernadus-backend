@@ -55,7 +55,7 @@ class JacketListing extends Model
             ->where(function (Builder $builder): void {
                 $builder
                     ->whereNull('published_at')
-                    ->orWhere('published_at', '<=', now());
+                    ->orWhere('published_at', '>=', now());
             });
     }
 

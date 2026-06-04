@@ -70,6 +70,9 @@ RUN chmod +x /usr/local/bin/docker-entrypoint \
 
 EXPOSE 8000
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -fsS http://localhost:8000/up || exit 1
+
 ENTRYPOINT ["docker-entrypoint"]
 
 CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:8000"]

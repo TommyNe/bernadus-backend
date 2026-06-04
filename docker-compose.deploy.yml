@@ -17,8 +17,8 @@ services:
       - 'traefik.http.routers.bernadus-backend.priority=100'
       - 'traefik.http.routers.bernadus-backend.service=bernadus-backend'
       - 'traefik.http.services.bernadus-backend.loadbalancer.server.port=8000' # interner Port
-      - 'traefik.http.middlewares.app-sslproxy.headers.sslproxyheaders.X-Forwarded-Proto=https'
-      - 'traefik.http.routers.app.middlewares=app-sslproxy'
+      - 'traefik.http.middlewares.bernadus-backend-sslproxy.headers.sslproxyheaders.X-Forwarded-Proto=https'
+      - 'traefik.http.routers.bernadus-backend.middlewares=bernadus-backend-sslproxy'
     environment:
       APP_NAME: Bernadus
       APP_ENV: ${APP_ENV:-production}
@@ -64,7 +64,10 @@ services:
       MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Laravel}
       VITE_APP_NAME: ${VITE_APP_NAME:-Laravel}
     ports:
-      - "${APP_PORT:-8000}:80"
+      - "${APP_PORT:-8000}:8000"
+    networks:
+      - default
+      - web
     volumes:
       - app_storage:/app/storage
 
@@ -99,3 +102,7 @@ volumes:
   app_storage:
   postgres_data:
   redis_data:
+
+networks:
+  web:
+    external: true

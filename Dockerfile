@@ -68,8 +68,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint \
     && mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache \
     && chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
-EXPOSE 80
+EXPOSE 8000
 
 ENTRYPOINT ["docker-entrypoint"]
 
-CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:80"]
+CMD ["frankenphp", "php-server", "--root=/app/public", "--listen=:8000"]

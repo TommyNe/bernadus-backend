@@ -7,6 +7,18 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=web'
+      - 'traefik.http.routers.bernadus-backend.rule=Host(`bernadus-backend.tinnen.digital`)'
+      - 'traefik.http.routers.bernadus-backend.entrypoints=websecure'
+      - 'traefik.http.routers.bernadus-backend.tls.certresolver=le'
+      - 'traefik.http.routers.bernadus-backend.priority=100'
+      - 'traefik.http.routers.bernadus-backend.service=bernadus-backend'
+      - 'traefik.http.services.bernadus-backend.loadbalancer.server.port=8000' # interner Port
+      - 'traefik.http.middlewares.app-sslproxy.headers.sslproxyheaders.X-Forwarded-Proto=https'
+      - 'traefik.http.routers.app.middlewares=app-sslproxy'
     environment:
       APP_NAME: Bernadus
       APP_ENV: ${APP_ENV:-production}

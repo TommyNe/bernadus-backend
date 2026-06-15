@@ -10,11 +10,13 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Image;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -65,11 +67,14 @@ class ChronicleEntryResource extends Resource
                     ->label('Zusatztext')
                     ->rows(2)
                     ->columnSpanFull(),
-                Select::make('image_media_id')
-                    ->relationship('image', 'filename')
-                    ->label('Bild')
-                    ->searchable()
-                    ->preload(),
+                FileUpload::make('image_path')
+                    ->label('Bilddatei')
+                    ->disk('public')
+                    ->directory('chronicle-images')
+                    ->image()
+                    ->maxSize(1024)
+                    ->maxFiles(1)
+                    ->columnSpanFull(),
                 TextInput::make('external_image_url')
                     ->label('Externe Bild-URL')
                     ->url()

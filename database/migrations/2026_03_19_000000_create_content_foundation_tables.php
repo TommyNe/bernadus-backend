@@ -21,21 +21,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('media', function (Blueprint $table): void {
-            $table->id();
-            $table->string('disk')->default('public');
-            $table->string('path');
-            $table->string('filename');
-            $table->string('mime_type');
-            $table->string('extension')->nullable();
-            $table->unsignedBigInteger('size')->nullable();
-            $table->unsignedInteger('width')->nullable();
-            $table->unsignedInteger('height')->nullable();
-            $table->string('title')->nullable();
-            $table->string('alt_text')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('external_links', function (Blueprint $table): void {
             $table->id();
             $table->string('link_key')->unique();
@@ -50,7 +35,7 @@ return new class extends Migration
             $table->string('display_name');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->foreignId('portrait_media_id')->nullable()->constrained('media')->nullOnDelete();
+            $table->string('image')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });
@@ -141,7 +126,7 @@ return new class extends Migration
             $table->string('headline')->nullable();
             $table->text('pair_text');
             $table->text('secondary_text')->nullable();
-            $table->foreignId('image_media_id')->nullable()->constrained('media')->nullOnDelete();
+            $table->string('image_path')->nullable();
             $table->string('external_image_url')->nullable();
             $table->string('source_url')->nullable();
             $table->boolean('is_highlighted')->default(true);

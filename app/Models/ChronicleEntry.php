@@ -17,7 +17,7 @@ class ChronicleEntry extends Model
         'headline',
         'pair_text',
         'secondary_text',
-        'image_media_id',
+        'image_path',
         'external_image_url',
         'source_url',
         'is_highlighted',
@@ -34,10 +34,5 @@ class ChronicleEntry extends Model
     public function chronicle(): BelongsTo
     {
         return $this->belongsTo(Chronicle::class);
-    }
-
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(Medium::class, 'image_media_id');
     }
 }

@@ -19,11 +19,6 @@ class Person extends Model
         'notes',
     ];
 
-    public function portrait(): BelongsTo
-    {
-        return $this->belongsTo(Medium::class, 'portrait_media_id');
-    }
-
     public function roleAssignments(): HasMany
     {
         return $this->hasMany(RoleAssignment::class)->orderBy('sort_order');

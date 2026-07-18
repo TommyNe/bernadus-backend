@@ -112,7 +112,7 @@ Route::prefix('flyer')->name('api.flyer.')->group(function (): void {
 
 Route::prefix('jackenboerse')->name('api.jackenboerse.')->group(function (): void {
     Route::get('/', [JacketListingController::class, 'index'])->name('index');
-    Route::get('{value}', [JacketListingController::class, 'show'])->name('show');
+    Route::get('{jacket_listing}', [JacketListingController::class, 'show'])->name('show');
 });
 
 Route::prefix('people')->name('api.people.')->group(function (): void {

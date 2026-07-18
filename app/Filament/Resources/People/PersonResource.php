@@ -11,6 +11,7 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -49,11 +50,12 @@ class PersonResource extends Resource
                 TextInput::make('last_name')
                     ->label('Nachname')
                     ->maxLength(255),
-                Select::make('portrait_media_id')
-                    ->relationship('portrait', 'filename')
-                    ->label('Portrait')
-                    ->searchable()
-                    ->preload(),
+                FileUpload::make('image')
+                    ->label('Bild')
+                    ->image()
+                    ->directory('people')
+                    ->maxSize(1024)
+                    ->columnSpanFull(),
                 Textarea::make('notes')
                     ->label('Notizen')
                     ->rows(4)

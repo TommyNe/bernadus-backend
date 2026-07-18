@@ -12,10 +12,6 @@ class ChronicleController extends ResourceController
 
     protected string $resourceClass = ChronicleResource::class;
 
-    protected array $indexRelationships = ['entries.image'];
-
-    protected array $showRelationships = ['entries.image'];
-
     protected string $routeKey = 'chronicle_key';
 
     protected function applyIndexOrdering(Builder $query): void

@@ -27,7 +27,7 @@ class ChronicleEntryResource extends JsonResource
             'is_highlighted' => $this->is_highlighted,
             'sort_order' => $this->sort_order,
             'chronicle' => new ChronicleResource($this->whenLoaded('chronicle')),
-            'image' => new MediumResource($this->whenLoaded('image')),
+            'image_path' => 'storage/' . $this->image_path,
             ...$this->timestamps($request),
         ];
     }

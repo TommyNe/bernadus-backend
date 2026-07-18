@@ -7,6 +7,9 @@ use Illuminate\Http\JsonResponse;
 
 class OpenApiDocumentationController extends Controller
 {
+    /**
+     * @throws \JsonException
+     */
     public function json(): JsonResponse
     {
         /** @var array<string, mixed> $spec */

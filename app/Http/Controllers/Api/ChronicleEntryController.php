@@ -12,10 +12,6 @@ class ChronicleEntryController extends ResourceController
 
     protected string $resourceClass = ChronicleEntryResource::class;
 
-    protected array $indexRelationships = ['chronicle', 'image'];
-
-    protected array $showRelationships = ['chronicle', 'image'];
-
     protected function applyIndexOrdering(Builder $query): void
     {
         $query->orderByDesc('year')->orderBy('sort_order');

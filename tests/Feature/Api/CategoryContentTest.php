@@ -29,7 +29,7 @@ it('returns seeded pages with sections', function () {
 
     $this->getJson('/api/pages')
         ->assertSuccessful()
-        ->assertJsonCount(16, 'data')
+        ->assertJsonCount(18, 'data')
         ->assertJsonPath('data.0.slug', 'start')
         ->assertJsonPath('data.0.sections.0.section_key', 'hero-start')
         ->assertJsonPath('data.0.sections.1.section_key', 'cta-start');

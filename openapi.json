@@ -26,6 +26,8 @@
     { "name": "Chronicle Entries" },
     { "name": "Media" },
     { "name": "Gallery" },
+    { "name": "Flyer" },
+    { "name": "Jacket Listings" },
     { "name": "People" },
     { "name": "Roles" },
     { "name": "Role Assignments" },
@@ -748,6 +750,81 @@
         }
       }
     },
+    "/api/jackenboerse": {
+      "get": {
+        "tags": ["Jacket Listings"],
+        "summary": "Listet veröffentlichte Angebote der Jackenbörse",
+        "operationId": "listJacketListings",
+        "responses": {
+          "200": {
+            "description": "Jackenbörse erfolgreich geladen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer" },
+                          "type": { "type": ["string", "null"] },
+                          "title": { "type": "string" },
+                          "details": { "type": ["string", "null"] },
+                          "contact_hint": { "type": ["string", "null"] },
+                          "sort_order": { "type": "integer" },
+                          "published_at": { "type": ["string", "null"], "format": "date-time" }
+                        },
+                        "required": ["id", "title", "sort_order"]
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/jackenboerse/{jacket_listing}": {
+      "get": {
+        "tags": ["Jacket Listings"],
+        "summary": "Liefert ein veröffentlichtes Angebot der Jackenbörse per ID",
+        "operationId": "showJacketListing",
+        "parameters": [{ "$ref": "#/components/parameters/NumericId" }],
+        "responses": {
+          "200": {
+            "description": "Angebot gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "type": { "type": ["string", "null"] },
+                        "title": { "type": "string" },
+                        "details": { "type": ["string", "null"] },
+                        "contact_hint": { "type": ["string", "null"] },
+                        "sort_order": { "type": "integer" },
+                        "published_at": { "type": ["string", "null"], "format": "date-time" }
+                      },
+                      "required": ["id", "title", "sort_order"]
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
     "/api/media/{value}": {
       "get": {
         "tags": ["Media"],
@@ -760,6 +837,40 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/MediumResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/flyer/current": {
+      "get": {
+        "tags": ["Flyer"],
+        "summary": "Liefert den aktuell aktiven Flyer",
+        "operationId": "showCurrentFlyer",
+        "responses": {
+          "200": {
+            "description": "Aktueller Flyer gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "title": { "type": "string" },
+                        "pdf_url": { "type": "string", "format": "uri" },
+                        "filename": { "type": ["string", "null"] },
+                        "uploaded_at": { "type": ["string", "null"], "format": "date-time" },
+                        "updated_at": { "type": ["string", "null"], "format": "date-time" }
+                      },
+                      "required": ["title", "pdf_url", "filename", "uploaded_at", "updated_at"]
+                    }
+                  },
+                  "required": ["data"]
+                }
               }
             }
           },
